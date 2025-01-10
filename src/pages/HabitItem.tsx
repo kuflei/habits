@@ -5,6 +5,7 @@ import HabitCalendar from '../features/habits/HabitCalendar';
 import Modal from '../components/Modal';
 import HabitForm from '../features/habits/HabitForm';
 import {Button} from "@mui/material";
+import {generateDateRange} from "../utils/date.ts";
 
 interface HabitItemProps {
     habit: Habit;
@@ -14,18 +15,7 @@ const HabitItem: React.FC<HabitItemProps> = ({ habit }) => {
     const [isEditing, setIsEditing] = useState(false);
     const deleteHabit = useHabitStore((state) => state.deleteHabit);
     const { progress, startDate, endDate, reward } = habit;
-    // Generate array of dates
-    const generateDateRange = (start: string, end: string) => {
-        const startDate = new Date(start);
-        const endDate = new Date(end);
-        const dates = [];
 
-        for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-            dates.push(new Date(d).toISOString().split('T')[0]);
-        }
-
-        return dates;
-    };
     const dateRange = generateDateRange(startDate, endDate);
     // Checking if habit done
     const isHabitCompleted = dateRange.every((date) => progress[date]);

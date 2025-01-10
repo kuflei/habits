@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Habit } from '../../types/Habit';
 import { useHabitStore } from '../../store/useHabitStore';
-import { generateDateRange, today } from '../../utils/date';
+import { generateCalendarTiles, today } from '../../utils/date';
 import classNames from 'classnames';
 
 interface HabitCalendarProps { // Describes the structure of an object
@@ -12,7 +12,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
     const [message, setMessage] = useState(false);
     const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
 
-    const dateRange = generateDateRange(habit.startDate, habit.endDate, habit.frequency);
+    const dateRange = generateCalendarTiles(habit.startDate, habit.endDate, habit.frequency);
 
     const handleDateClick = (date: string) => {
         if (date > today) {
