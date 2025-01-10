@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Habit } from '../../types/Habit.ts';
-import { useHabitStore } from '../../store/useHabitStore.ts';
-import { generateDateRange, today } from '../../utils/dateUtils.ts';
+import { Habit } from '../../types/Habit';
+import { useHabitStore } from '../../store/useHabitStore';
+import { generateDateRange, today } from '../../utils/date';
 import classNames from 'classnames';
 
 interface HabitCalendarProps { // Describes the structure of an object

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import HabitForm from '../features/habits/HabitForm.tsx';
+import HabitForm from '../features/habits/HabitForm';
 import HabitList from './HabitList';
 import Modal from '../components/Modal';
+import {Button} from "@mui/material";
 
 const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +36,7 @@ const Home: React.FC = () => {
             </Modal>
 
             <HabitList/>
-            <button onClick={() => setIsModalOpen(true)}>Додати нову звичку</button>
+            <Button variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>Додати нову звичку</Button>
         </div>
     );
 };

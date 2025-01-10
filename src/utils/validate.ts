@@ -1,4 +1,4 @@
-import {today} from "./dateUtils.ts";
+import {today} from "./date";
 
 export const validate = (values: any) => {
     const errors: { [key: string]: string } = {};

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Habit } from '../types/Habit';
 import { useHabitStore } from '../store/useHabitStore';
-import HabitCalendar from '../features/habits/HabitCalendar.tsx';
+import HabitCalendar from '../features/habits/HabitCalendar';
 import Modal from '../components/Modal';
-import HabitForm from '../features/habits/HabitForm.tsx';
+import HabitForm from '../features/habits/HabitForm';
+import {Button} from "@mui/material";
 
 interface HabitItemProps {
     habit: Habit;
@@ -25,9 +26,7 @@ const HabitItem: React.FC<HabitItemProps> = ({ habit }) => {
 
         return dates;
     };
-
     const dateRange = generateDateRange(startDate, endDate);
-
     // Checking if habit done
     const isHabitCompleted = dateRange.every((date) => progress[date]);
     return (
@@ -38,7 +37,6 @@ const HabitItem: React.FC<HabitItemProps> = ({ habit }) => {
                 <p>📅 Період: {habit.startDate} - {habit.endDate}</p>
                 {habit.reward && <p>🏆 Винагорода: {habit.reward}</p>}
             </div>
-
             <HabitCalendar habit={habit} />
 
             {isHabitCompleted && (
@@ -46,10 +44,9 @@ const HabitItem: React.FC<HabitItemProps> = ({ habit }) => {
                     🎉 Вітаємо! Ви досягли своєї звички! Ваша винагорода: <strong>{reward}</strong>
                 </div>
             )}
-
             <div className="habit-actions">
-                {!isHabitCompleted && (<button onClick={() => setIsEditing(true)}>Редагувати</button>)}
-                <button onClick={() => deleteHabit(habit.id)}>Видалити</button>
+                {!isHabitCompleted && (<Button variant="contained" color="primary" onClick={() => setIsEditing(true)}>Редагувати</Button>)}
+                <Button variant="contained" color="secondary" onClick={() => deleteHabit(habit.id)}>Видалити</Button>
             </div>
 
             <Modal isOpen={isEditing} onClose={() => setIsEditing(false)}>

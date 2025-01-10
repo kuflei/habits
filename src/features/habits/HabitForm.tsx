@@ -1,9 +1,13 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { Habit } from '../../types/Habit.ts';
-import { useHabitStore } from '../../store/useHabitStore.ts';
-import { today } from '../../utils/dateUtils.ts';
-import {validate} from "../../utils/validateUtils.ts";
+import { useHabitStore } from '../../store/useHabitStore';
+import { today } from '../../utils/date';
+import {validate} from "../../utils/validate";
+import InputDate from "../../components/InputDate.tsx";
+import { Input, InputLabel, Button} from '@mui/material';
+import Grid from '@mui/material/Grid2';
+
 
 interface HabitFormProps {
     habit?: Habit;
@@ -42,8 +46,8 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
         <form onSubmit={formik.handleSubmit}>
             <h2>{habit ? 'Редагувати звичку' : 'Додати звичку'}</h2>
 
-            <label>Назва звички:</label>
-            <input
+            <InputLabel>Назва звички:</InputLabel>
+            <Input
                 type="text"
                 name="name"
                 placeholder="Назва звички"
@@ -54,44 +58,41 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
             {formik.touched.name && formik.errors.name && (
                 <p className="error-text">{formik.errors.name}</p>
             )}
-            <label>Початкова дата:</label>
-            <input
-                type="date"
-                name="startDate"
-                value={formik.values.startDate}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                min={today}
+
+            <InputDate label="Початкова дата:"
+                       name="startDate"
+                       value={formik.values.startDate}
+                       onChange={formik.handleChange}
+                       onBlur={formik.handleBlur}
+                       min={today}
             />
+
             {formik.touched.startDate && formik.errors.startDate && (
                 <p className="error-text">{formik.errors.startDate}</p>
             )}
-            <label>Кінцева дата:</label>
-            <input
-                type="date"
-                name="endDate"
-                value={formik.values.endDate}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                min={formik.values.startDate || today}
+            <InputDate label="Кінцева дата:"
+                       name="endDate"
+                       value={formik.values.endDate}
+                       onChange={formik.handleChange}
+                       onBlur={formik.handleBlur}
+                       min={formik.values.startDate || today}
             />
             {formik.touched.endDate && formik.errors.endDate && (
                 <p className="error-text">{formik.errors.endDate}</p>
             )}
-            <label>Періодичність (у днях):</label>
-            <input
+            <InputLabel>Періодичність (у днях):</InputLabel>
+            <Input
                 type="number"
                 name="frequency"
                 value={formik.values.frequency}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                min={1}
             />
             {formik.touched.frequency && formik.errors.frequency && (
                 <p className="error-text">{formik.errors.frequency}</p>
             )}
-            <label>Винагорода:</label>
-            <input
+            <InputLabel>Винагорода:</InputLabel>
+            <Input
                 type="text"
                 name="reward"
                 placeholder="Що ви отримаєте за досягнення звички?"
@@ -102,8 +103,11 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
             {formik.touched.reward && formik.errors.reward && (
                 <p className="error-text">{formik.errors.reward}</p>
             )}
-            <button type="submit">{habit ? 'Зберегти' : 'Додати звичку'}</button>
-            <button type="button" onClick={onClose}>Скасувати</button>
+            <Grid container direction="row" columnSpacing={{xs: 1, sm: 2, md: 3}}>
+                <Button variant="contained" color="primary"
+                        type="submit">{habit ? 'Зберегти' : 'Додати звичку'}</Button>
+                <Button variant="contained" color="secondary" type="button" onClick={onClose}>Скасувати</Button>
+            </Grid>
 
         </form>
     );
