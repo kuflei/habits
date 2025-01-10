@@ -4,7 +4,7 @@ import { Container } from '@mui/material'
 
 function App() {
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ mb: 12 }}>
             <MainNavigation />
             <AppRoutes />
         </Container>

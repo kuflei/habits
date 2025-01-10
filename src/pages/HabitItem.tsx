@@ -4,8 +4,8 @@ import { useHabitStore } from '../store/useHabitStore';
 import HabitCalendar from '../features/habits/HabitCalendar';
 import Modal from '../components/Modal';
 import HabitForm from '../features/habits/HabitForm';
-import {Button} from "@mui/material";
-import {generateDateRange} from "../utils/date.ts";
+import {generateDateRange} from "../utils/date";
+import { Card, CardHeader, CardContent, Typography, Button, Box } from '@mui/material';
 
 interface HabitItemProps {
     habit: Habit;
@@ -20,25 +20,45 @@ const HabitItem: React.FC<HabitItemProps> = ({ habit }) => {
     // Checking if habit done
     const isHabitCompleted = dateRange.every((date) => progress[date]);
     return (
-        <div className="habit-card">
-            <div className="habit-header">
-                <h3>{habit.name}</h3>
-                <p>🎯 Періодичність: кожні {habit.frequency} днів</p>
-                <p>📅 Період: {habit.startDate} - {habit.endDate}</p>
-                {habit.reward && <p>🏆 Винагорода: {habit.reward}</p>}
-            </div>
-            <HabitCalendar habit={habit} />
+        <div>
+            <Card sx={{ mb: 3, p: 2, backgroundColor: isHabitCompleted ? '#eeeeee' : '#fff' }}>
+                <CardHeader
+                    title={habit.name}
+                    subheader={`🎯 Періодичність: кожні ${habit.frequency} днів`}
+                />
+                <CardContent>
+                    <Typography variant="body2" color="textSecondary">
+                        📅 Період: {habit.startDate} - {habit.endDate}
+                    </Typography>
 
-            {isHabitCompleted && (
-                <div className="reward-message">
-                    🎉 Вітаємо! Ви досягли своєї звички! Ваша винагорода: <strong>{reward}</strong>
-                </div>
-            )}
-            <div className="habit-actions">
-                {!isHabitCompleted && (<Button variant="contained" color="primary" onClick={() => setIsEditing(true)}>Редагувати</Button>)}
-                <Button variant="contained" color="secondary" onClick={() => deleteHabit(habit.id)}>Видалити</Button>
-            </div>
+                    {habit.reward && (
+                        <Typography variant="body2" sx={{ mt: 1 }}>
+                            🏆 Винагорода: {habit.reward}
+                        </Typography>
+                    )}
 
+                    <Box sx={{ mt: 2 }}>
+                        <HabitCalendar habit={habit} />
+                    </Box>
+                    {isHabitCompleted && (
+                        <Box sx={{mt: 2, p: 2, backgroundColor: '#e7f5e7', borderRadius: 1, border: '1px solid #4caf50', color: '#2e7d32'}}>
+                            <Typography variant="h6" color="primary">
+                                🎉 Вітаємо! Ви досягли своєї звички! Ваша винагорода: <strong>{reward}</strong>
+                            </Typography>
+                        </Box>
+                    )}
+                    <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                        {!isHabitCompleted && (
+                            <Button variant="contained" color="primary" onClick={() => setIsEditing(true)}>
+                                Редагувати
+                            </Button>
+                        )}
+                        <Button variant="contained" color="secondary" onClick={() => deleteHabit(habit.id)}>
+                            Видалити
+                        </Button>
+                    </Box>
+                </CardContent>
+            </Card>
             <Modal isOpen={isEditing} onClose={() => setIsEditing(false)}>
                 <HabitForm habit={habit} onClose={() => setIsEditing(false)} />
             </Modal>

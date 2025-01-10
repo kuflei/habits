@@ -26,8 +26,6 @@ const Home: React.FC = () => {
     return (
         <div className="home-page">
             <h1>Трекер звичок</h1>
-
-
             {showSuccessMessage && (
                 <p className={`success-message ${hideMessage ? 'hide' : ''}`}>✅ Додано!</p>
             )}
@@ -36,7 +34,18 @@ const Home: React.FC = () => {
             </Modal>
 
             <HabitList/>
-            <Button variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>Додати нову звичку</Button>
+            <Button variant="contained" sx={{
+                    backgroundColor: '#4caf50',
+                    color: '#fff',
+                    ml: 'auto',
+                    display: 'block',
+                    '&:hover': {
+                        backgroundColor: '#388e3c',
+                    },
+                }}
+                onClick={() => setIsModalOpen(true)}>
+                Додати нову звичку
+            </Button>
         </div>
     );
 };

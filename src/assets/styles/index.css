@@ -1,0 +1,9 @@
+.calendar-day.completed {
+    background-color: #4caf50;
+    color: white;
+}
+
+.calendar-day.missed {
+    background-color: #ff4d4d;
+    color: white;
+}
