@@ -1,5 +1,5 @@
 import AppRoutes from './routes/index.tsx'
-import MainNavigation from './components/ui/MainNavigation'
+import MainNavigation from './components/MainNavigation.tsx'
 import { Container } from '@mui/material'
 
 function App() {

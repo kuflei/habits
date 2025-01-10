@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Habit } from '../types/Habit';
 import { useHabitStore } from '../store/useHabitStore';
-import HabitCalendar from '../components/HabitCalendar';
+import HabitCalendar from '../features/habits/HabitCalendar.tsx';
 import Modal from '../components/Modal';
-import EditHabitForm from '../components/EditHabitForm';
+import HabitForm from '../features/habits/HabitForm.tsx';
 
 interface HabitItemProps {
     habit: Habit;
@@ -53,7 +53,7 @@ const HabitItem: React.FC<HabitItemProps> = ({ habit }) => {
             </div>
 
             <Modal isOpen={isEditing} onClose={() => setIsEditing(false)}>
-                <EditHabitForm habit={habit} onClose={() => setIsEditing(false)} />
+                <HabitForm habit={habit} onClose={() => setIsEditing(false)} />
             </Modal>
         </div>
     );

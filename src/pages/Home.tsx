@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import HabitForm from '../components/HabitForm';
+import HabitForm from '../features/habits/HabitForm.tsx';
 import HabitList from './HabitList';
 import Modal from '../components/Modal';
 
@@ -25,12 +25,12 @@ const Home: React.FC = () => {
     return (
         <div className="home-page">
             <h1>Трекер звичок</h1>
+
+
             {showSuccessMessage && (
                 <p className={`success-message ${hideMessage ? 'hide' : ''}`}>✅ Додано!</p>
             )}
-
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <h2>Додати звичку</h2>
                 <HabitForm onClose={handleHabitAdded}/>
             </Modal>
 
