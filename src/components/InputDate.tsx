@@ -1,28 +1,31 @@
 import React from "react";
-import { Input, InputLabel  } from '@mui/material';
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 interface InputDateProps {
     label: string;
     name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-    min: string;
+    value: string | null;
+    onChange: (name: string, value: string | null) => void;
+    min?: string;
 }
 
-const InputDate: React.FC<InputDateProps> = ({label, name, value, onChange, onBlur, min }) => {
+const InputDate: React.FC<InputDateProps> = ({label, name, value, onChange, min }) => {
     return (
-        <>
-            <InputLabel htmlFor={name}>{label}</InputLabel>
-            <Input
-                id={name}
-                type="date"
-                name={name}
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-                min={min}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+
+                label={label}
+                value={value ? dayjs(value) : null}
+                onChange={(newValue) => {
+                    onChange(name, newValue ? newValue.format("YYYY-MM-DD") : null);
+                }}
+                minDate={min ? dayjs(min) : undefined}
             />
-        </>
-    )
-}
+        </LocalizationProvider>
+    );
+};
+
 export default InputDate;

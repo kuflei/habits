@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -14,12 +13,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         <React.Fragment>
             <Dialog
                 open={isOpen}
-                onClose={onClose}
-                aria-describedby="alert-dialog-description">
+                onClose={onClose}>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                         {children}
-                    </DialogContentText>
                 </DialogContent>
             </Dialog>
         </React.Fragment>
