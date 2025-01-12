@@ -5,6 +5,7 @@ import { generateCalendarTiles, today } from '../../utils/date';
 import classNames from 'classnames';
 import { Paper, Typography, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import {useTranslation} from "react-i18next";
 
 interface HabitCalendarProps { // Describes the structure of an object
     habit: Habit;
@@ -13,7 +14,7 @@ interface HabitCalendarProps { // Describes the structure of an object
 const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
     const [message, setMessage] = useState(false);
     const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
-
+    const { t } = useTranslation();
     const dateRange = generateCalendarTiles(habit.startDate, habit.endDate, habit.frequency);
 
     const handleDateClick = (date: string) => {
@@ -57,7 +58,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
             {message && (
                 <Grid size={{ xs: 12 }}>
                     <Alert severity="warning" sx={{ mt: 2, textAlign: 'center' }}>
-                        🚫 Не можна клікати на майбутні дати!
+                        🚫 {t("noFutureDates")}
                     </Alert>
                 </Grid>
             )}

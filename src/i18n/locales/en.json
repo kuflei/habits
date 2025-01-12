@@ -1,0 +1,22 @@
+{
+  "habits": "Habits",
+  "habitTracker": "Habit tracker",
+  "added": "Added!",
+  "addNewHabit": "Add new habit",
+  "frequency": "Frequency:",
+  "period": "Period: ",
+  "reward": "Reward: ",
+  "congratulations": "Congratulations! You have achieved your habit! Your reward: ",
+  "edit": "Edit",
+  "delete": "Delete",
+  "editHabit": "Edit habit",
+  "addHabit": "Add habit",
+  "habitName": "Habit name",
+  "startDate": "Start date:",
+  "endDate": "End date:",
+  "rewardPlaceholder": "What will you get for achieving the habit?",
+  "save": "Save",
+  "add": "Add habit",
+  "cancel": "Cancel",
+  "noFutureDates": "You cannot click on future dates!"
+}

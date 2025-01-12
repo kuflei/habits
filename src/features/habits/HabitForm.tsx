@@ -6,6 +6,7 @@ import { today } from '../../utils/date';
 import {validate} from "../../utils/validate";
 import InputDate from "../../components/InputDate.tsx";
 import {Button, FormControl, FormHelperText, Typography, TextField} from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface HabitFormProps {
     habit?: Habit;
@@ -15,7 +16,7 @@ interface HabitFormProps {
 const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
     const addHabit = useHabitStore((state) => state.addHabit);
     const updateHabit = useHabitStore((state) => state.updateHabit);
-
+    const { t } = useTranslation();
     const formik = useFormik({
         initialValues: {
             name: habit?.name || '',
@@ -42,12 +43,12 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <Typography variant="h5" sx={{ mb: 3 }}>{habit ? 'Редагувати звичку' : 'Додати звичку'}</Typography>
+            <Typography variant="h5" sx={{ mb: 3 }}>{habit ? t("editHabit") : t("addHabit")}</Typography>
             <FormControl fullWidth={true} margin="normal">
-                <TextField label="Назва звички:" variant="outlined"
+                <TextField label={t("habitName")} variant="outlined"
                        type="text"
                        name="name"
-                       placeholder="Назва звички"
+                       placeholder={t("habitName")}
                        value={formik.values.name}
                        onChange={formik.handleChange}
                 />
@@ -57,7 +58,7 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
             </FormControl>
             <FormControl fullWidth={true} margin="normal">
                 <InputDate
-                    label="Початкова дата:"
+                    label={t("startDate")}
                     name="startDate"
                     value={formik.values.startDate}
                     onChange={(name, value) => formik.setFieldValue(name, value)}
@@ -69,7 +70,7 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
             </FormControl>
             <FormControl fullWidth={true} margin="normal">
                 <InputDate
-                    label="Кінцева дата:"
+                    label={t("endDate")}
                     name="endDate"
                     value={formik.values.endDate}
                     onChange={(name, value) => formik.setFieldValue(name, value)}
@@ -80,7 +81,7 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
                 )}
             </FormControl>
             <FormControl fullWidth={true} margin="normal">
-                <TextField label="Періодичність (у днях):" variant="outlined"
+                <TextField label={t("frequency")} variant="outlined"
                     type="number"
                     name="frequency"
                     value={formik.values.frequency}
@@ -92,10 +93,10 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
                 )}
             </FormControl>
             <FormControl fullWidth={true} margin="normal">
-                <TextField label="Винагорода:" variant="outlined"
+                <TextField label={t("reward")} variant="outlined"
                     type="text"
                     name="reward"
-                    placeholder="Що ви отримаєте за досягнення звички?"
+                    placeholder={t("rewardPlaceholder")}
                     value={formik.values.reward}
                     onChange={formik.handleChange}
                 />
@@ -105,8 +106,8 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
             </FormControl>
 
             <Button variant="contained" color="primary" sx={{ mr: 2, mt: 3 }}
-                    type="submit">{habit ? 'Зберегти' : 'Додати звичку'}</Button>
-            <Button variant="contained" color="secondary" type="button" sx={{ mt: 3 }} onClick={onClose}>Скасувати</Button>
+                    type="submit">{habit ? t("save") : t("add")}</Button>
+            <Button variant="contained" color="secondary" type="button" sx={{ mt: 3 }} onClick={onClose}>{t("cancel")}</Button>
         </form>
     );
 };

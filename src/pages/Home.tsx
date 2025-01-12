@@ -3,11 +3,14 @@ import HabitForm from '../features/habits/HabitForm';
 import HabitList from './HabitList';
 import Modal from '../components/Modal';
 import {Button} from "@mui/material";
+import { useTranslation } from 'react-i18next';
+
 
 const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [hideMessage, setHideMessage] = useState(false);
+    const { t } = useTranslation();
 
     const handleHabitAdded = () => {
         setIsModalOpen(false);
@@ -25,9 +28,9 @@ const Home: React.FC = () => {
 
     return (
         <div className="home-page">
-            <h1>Трекер звичок</h1>
+            <h1>{t("habitTracker")}</h1>
             {showSuccessMessage && (
-                <p className={`success-message ${hideMessage ? 'hide' : ''}`}>✅ Додано!</p>
+                <p className={`success-message ${hideMessage ? 'hide' : ''}`}>✅ {t("added")}</p>
             )}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <HabitForm onClose={handleHabitAdded}/>
@@ -44,7 +47,7 @@ const Home: React.FC = () => {
                     },
                 }}
                 onClick={() => setIsModalOpen(true)}>
-                Додати нову звичку
+                {t("addNewHabit")}
             </Button>
         </div>
     );
