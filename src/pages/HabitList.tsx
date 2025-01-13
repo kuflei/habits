@@ -1,6 +1,6 @@
 import React from 'react';
-import { useHabitStore } from '../store/useHabitStore';
-import HabitItem from './HabitItem';
+import { useHabitStore } from '@/store/useHabitStore';
+import HabitItem from '@/pages/HabitItem';
 
 const HabitList: React.FC = () => {
     const habits = useHabitStore((state) => state.habits);

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import HabitForm from '../features/habits/HabitForm';
-import HabitList from './HabitList';
-import Modal from '../components/Modal';
-import {Button} from "@mui/material";
 import { useTranslation } from 'react-i18next';
-
+import {Button} from "@mui/material";
+import HabitForm from '@/features/habits/HabitForm';
+import HabitList from '@/pages/HabitList';
+import Modal from '@/components/Modal';
 
 const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +12,7 @@ const Home: React.FC = () => {
     const { t } = useTranslation();
 
     const handleHabitAdded = () => {
+        /*TODO: mui message*/
         setIsModalOpen(false);
         setShowSuccessMessage(true);
 

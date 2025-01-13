@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
-import { Habit } from '../../types/Habit';
-import { useHabitStore } from '../../store/useHabitStore';
-import { generateDateRange, today } from '../../utils/date';
-import classNames from 'classnames';
 import { Paper, Typography, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import classNames from 'classnames';
 import {useTranslation} from "react-i18next";
+import { Habit } from '@/types/Habit';
+import { useHabitStore } from '@/store/useHabitStore';
+import { generateDateRange, today } from '@/utils/date';
 
 interface HabitCalendarProps { // Describes the structure of an object
     habit: Habit;
 }
 
-const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
+const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
     const [message, setMessage] = useState(false);
     const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
     const { t } = useTranslation();
-    const dateRange = generateDateRange(habit.startDate, habit.endDate, habit.frequency);
-
+    const dateRangeOptions = {
+        start: props.habit.startDate,
+        end: props.habit.endDate,
+        frequency: props.habit.frequency
+    };
+    const dateRange = generateDateRange(dateRangeOptions);
     const handleDateClick = (date: string) => {
         if (date > today) {
             // Not allow to click on the future date
@@ -24,8 +28,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
             setTimeout(() => setMessage(false), 2000);
             return;
         }
-
-         toggleHabitProgress(habit.id, date);
+         toggleHabitProgress(props.habit.id, date);
     };
 
     return (
@@ -35,7 +38,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
                     <Grid size={{ xs: 2, md: 1 }} key={date}>
                         <Paper
                             onClick={() => handleDateClick(date)}
-                            sx={{
+                            sx={{ /*TODO: make a value*/
                                 padding: 1,
                                 textAlign: 'center',
                                 cursor: 'pointer',
@@ -45,10 +48,10 @@ const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
                                 },
                             }}
                             className={classNames('calendar-day', {
-                                completed: habit.progress[date],
-                                missed: date < today && !habit.progress[date],
+                                completed: props.habit.progress[date],
+                                missed: date < today && !props.habit.progress[date],
                             })}
-                        >
+                        >{/*TODO: move new Date with lib*/}
                             <Typography variant="body2">{new Date(date).getDate()}</Typography>
                         </Paper>
                     </Grid>

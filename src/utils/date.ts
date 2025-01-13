@@ -1,4 +1,9 @@
-export const generateDateRange = (start: string, end: string, frequency: number = 1) => {
+interface dateRangeOptions {
+    start: string;
+    end: string;
+    frequency?: number;
+}
+export const generateDateRange = ({start, end, frequency= 1} : dateRangeOptions) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
     const dates = [];

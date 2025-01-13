@@ -12,17 +12,18 @@ interface InputDateProps {
     min?: string;
 }
 
-const InputDate: React.FC<InputDateProps> = ({label, name, value, onChange, min }) => {
+const InputDate: React.FC<InputDateProps> = (props) => {
+    /*TODO: onChange, minDate*/
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
 
-                label={label}
-                value={value ? dayjs(value) : null}
+                label={props.label}
+                value={props.value ? dayjs(props.value) : null}
                 onChange={(newValue) => {
-                    onChange(name, newValue ? newValue.format("YYYY-MM-DD") : null);
+                    props.onChange(props.name, newValue ? newValue.format("YYYY-MM-DD") : null);
                 }}
-                minDate={min ? dayjs(min) : undefined}
+                minDate={props.min ? dayjs(props.min) : undefined}
             />
         </LocalizationProvider>
     );

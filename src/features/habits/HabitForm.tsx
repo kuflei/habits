@@ -1,34 +1,34 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Habit } from '../../types/Habit.ts';
-import { useHabitStore } from '../../store/useHabitStore';
-import { today } from '../../utils/date';
-import {validate} from "../../utils/validate";
-import InputDate from "../../components/InputDate.tsx";
-import {Button, FormControl, FormHelperText, Typography, TextField} from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import {Button, FormControl, FormHelperText, Typography, TextField} from '@mui/material';
+import { Habit } from '@/types/Habit.ts';
+import { useHabitStore } from '@/store/useHabitStore';
+import { today } from '@/utils/date';
+import {validate} from "@/utils/validate";
+import InputDate from "@/components/InputDate.tsx";
 
 interface HabitFormProps {
     habit?: Habit;
     onClose: () => void;
 }
 
-const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
+const HabitForm: React.FC<HabitFormProps> = (props) => {
     const addHabit = useHabitStore((state) => state.addHabit);
     const updateHabit = useHabitStore((state) => state.updateHabit);
     const { t } = useTranslation();
     const formik = useFormik({
         initialValues: {
-            name: habit?.name || '',
-            startDate: habit?.startDate || '',
-            endDate: habit?.endDate || '',
-            frequency: habit?.frequency || 1,
-            reward: habit?.reward || '',
+            name: props.habit?.name || '',
+            startDate: props.habit?.startDate || '',
+            endDate: props.habit?.endDate || '',
+            frequency: props.habit?.frequency || 1,
+            reward: props.habit?.reward || '',
         },
         validate,
         onSubmit: (values) => {
-            if (habit) {
-                updateHabit({ ...habit, ...values });
+            if (props.habit) {
+                updateHabit({ ...props.habit, ...values });
             } else {
                 const newHabit = {
                     id: Date.now().toString(),
@@ -37,13 +37,13 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
                 };
                 addHabit(newHabit);
             }
-            onClose();
+            props.onClose();
         },
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <Typography variant="h5" sx={{ mb: 3 }}>{habit ? t("editHabit") : t("addHabit")}</Typography>
+            <Typography variant="h5" sx={{ mb: 3 }}>{props.habit ? t("editHabit") : t("addHabit")}</Typography>
             <FormControl fullWidth={true} margin="normal">
                 <TextField label={t("habitName")} variant="outlined"
                        type="text"
@@ -106,8 +106,8 @@ const HabitForm: React.FC<HabitFormProps> = ({habit, onClose }) => {
             </FormControl>
 
             <Button variant="contained" color="primary" sx={{ mr: 2, mt: 3 }}
-                    type="submit">{habit ? t("save") : t("add")}</Button>
-            <Button variant="contained" color="secondary" type="button" sx={{ mt: 3 }} onClick={onClose}>{t("cancel")}</Button>
+                    type="submit">{props.habit ? t("save") : t("add")}</Button>
+            <Button variant="contained" color="secondary" type="button" sx={{ mt: 3 }} onClick={props.onClose}>{t("cancel")}</Button>
         </form>
     );
 };

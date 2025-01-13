@@ -1,6 +1,6 @@
-import AppRoutes from './routes/routeConfig'
-import MainNavigation from './features/navigation/MainNavigation'
 import { Container } from '@mui/material'
+import AppRoutes from '@/routes/routeConfig'
+import MainNavigation from '@/features/navigation/MainNavigation'
 
 function App() {
     return (
@@ -8,8 +8,6 @@ function App() {
             <MainNavigation />
             <AppRoutes />
         </Container>
-
-
     )
 }
 

@@ -1,14 +1,11 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppBar, Toolbar, Typography, Button, ButtonGroup  } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-
-
 
 export default function MainNavigation() {
     const { t, i18n } = useTranslation();
     const [activeLanguage, setActiveLanguage] = useState('uk');
-
     const changeLanguage = (lng: string) => {
         i18n.changeLanguage(lng);
         setActiveLanguage(lng);

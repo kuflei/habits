@@ -12,6 +12,11 @@
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "strict": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
 }
