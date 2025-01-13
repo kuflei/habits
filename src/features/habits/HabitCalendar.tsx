@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Habit } from '../../types/Habit';
 import { useHabitStore } from '../../store/useHabitStore';
-import { generateCalendarTiles, today } from '../../utils/date';
+import { generateDateRange, today } from '../../utils/date';
 import classNames from 'classnames';
 import { Paper, Typography, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -15,7 +15,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = ({ habit }) => {
     const [message, setMessage] = useState(false);
     const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
     const { t } = useTranslation();
-    const dateRange = generateCalendarTiles(habit.startDate, habit.endDate, habit.frequency);
+    const dateRange = generateDateRange(habit.startDate, habit.endDate, habit.frequency);
 
     const handleDateClick = (date: string) => {
         if (date > today) {
