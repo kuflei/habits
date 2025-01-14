@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {useTranslation} from "react-i18next";
 import { Habit } from '@/types/Habit';
 import { useHabitStore } from '@/store/useHabitStore';
-import { generateDateRange, today } from '@/utils/date';
+import { generateDateRange, getDayOfMonth, today } from '@/utils/date';
 
 interface HabitCalendarProps { // Describes the structure of an object
     habit: Habit;
@@ -21,6 +21,15 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
         frequency: props.habit.frequency
     };
     const dateRange = generateDateRange(dateRangeOptions);
+    const cssPaper = {
+        padding: 1,
+        textAlign: 'center',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        '&:hover': {
+            boxShadow: 3,
+        }
+    }
     const handleDateClick = (date: string) => {
         if (date > today) {
             // Not allow to click on the future date
@@ -38,21 +47,12 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
                     <Grid size={{ xs: 2, md: 1 }} key={date}>
                         <Paper
                             onClick={() => handleDateClick(date)}
-                            sx={{ /*TODO: make a value*/
-                                padding: 1,
-                                textAlign: 'center',
-                                cursor: 'pointer',
-                                borderRadius: '4px',
-                                '&:hover': {
-                                    boxShadow: 3,
-                                },
-                            }}
+                            sx={cssPaper}
                             className={classNames('calendar-day', {
                                 completed: props.habit.progress[date],
                                 missed: date < today && !props.habit.progress[date],
-                            })}
-                        >{/*TODO: move new Date with lib*/}
-                            <Typography variant="body2">{new Date(date).getDate()}</Typography>
+                            })}>
+                            <Typography variant="body2">{getDayOfMonth(date)}</Typography>
                         </Paper>
                     </Grid>
                 );

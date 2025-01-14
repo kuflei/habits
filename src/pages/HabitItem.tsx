@@ -21,6 +21,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
         start: startDate,
         end: endDate,
     };
+    const cssBox = {mt: 2, p: 2, backgroundColor: '#e7f5e7', borderRadius: 1, border: '1px solid #4caf50', color: '#2e7d32'}
     const dateRange = generateDateRange(dateRangeOptions);
 
     // Checking if habit done
@@ -48,7 +49,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
                         <HabitCalendar habit={props.habit} />
                     </Box>
                     {isHabitCompleted && (
-                        <Box sx={{mt: 2, p: 2, backgroundColor: '#e7f5e7', borderRadius: 1, border: '1px solid #4caf50', color: '#2e7d32'}}>
+                        <Box sx={cssBox}>
                             <Typography variant="h6" color="primary">
                                 🎉 {t("congratulations")} <strong>{reward}</strong>
                             </Typography>

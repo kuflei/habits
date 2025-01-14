@@ -10,6 +10,15 @@ const Home: React.FC = () => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [hideMessage, setHideMessage] = useState(false);
     const { t } = useTranslation();
+    const cssButton = {
+        backgroundColor: '#4caf50',
+        color: '#fff',
+        ml: 'auto',
+        display: 'block',
+        '&:hover': {
+            backgroundColor: '#388e3c',
+        }
+    }
 
     const handleHabitAdded = () => {
         /*TODO: mui message*/
@@ -37,15 +46,7 @@ const Home: React.FC = () => {
             </Modal>
 
             <HabitList/>
-            <Button variant="contained" sx={{
-                    backgroundColor: '#4caf50',
-                    color: '#fff',
-                    ml: 'auto',
-                    display: 'block',
-                    '&:hover': {
-                        backgroundColor: '#388e3c',
-                    },
-                }}
+            <Button variant="contained" sx={cssButton}
                 onClick={() => setIsModalOpen(true)}>
                 {t("addNewHabit")}
             </Button>

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 interface dateRangeOptions {
     start: string;
     end: string;
@@ -16,3 +18,7 @@ export const generateDateRange = ({start, end, frequency= 1} : dateRangeOptions)
 };
 
 export const today = new Date().toISOString().split('T')[0];
+
+export const getDayOfMonth = (date: string | Date): number => {
+    return dayjs(date).date();
+};
