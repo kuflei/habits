@@ -11,6 +11,7 @@ import InputDate from "@/components/InputDate.tsx";
 interface HabitFormProps {
     habit?: Habit;
     onClose: () => void;
+    onSubmit?: () => void;
 }
 
 const HabitForm: React.FC<HabitFormProps> = (props) => {
@@ -36,6 +37,9 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
                     progress: {},
                 };
                 addHabit(newHabit);
+            }
+            if (props.onSubmit) {
+                props.onSubmit();
             }
             props.onClose();
         },
