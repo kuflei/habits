@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {Button} from "@mui/material";
+import {Button, Dialog, DialogContent, DialogActions} from "@mui/material";
 import HabitForm from '@/features/habits/HabitForm';
 import HabitList from '@/pages/HabitList';
-import Modal from '@/components/Modal';
 
 const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,10 +40,16 @@ const Home: React.FC = () => {
             {showSuccessMessage && (
                 <p className={`success-message ${hideMessage ? 'hide' : ''}`}>✅ {t("added")}</p>
             )}
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <HabitForm onClose={handleHabitAdded}/>
-            </Modal>
-
+            <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <DialogContent>
+                    <HabitForm onClose={handleHabitAdded}  />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setIsModalOpen(false)} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <HabitList/>
             <Button variant="contained" sx={cssButton}
                 onClick={() => setIsModalOpen(true)}>

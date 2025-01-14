@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardContent, Typography, Button, Box } from '@mui/material';
+import { Card, CardHeader, CardContent, Typography, Button, Box, Dialog, DialogContent, DialogActions } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Habit } from '@/types/Habit';
 import { useHabitStore } from '@/store/useHabitStore';
 import HabitCalendar from '@/features/habits/HabitCalendar';
-import Modal from '@/components/Modal';
 import HabitForm from '@/features/habits/HabitForm';
 import {generateDateRange} from "@/utils/date";
 
@@ -67,9 +66,16 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
                     </Box>
                 </CardContent>
             </Card>
-            <Modal isOpen={isEditing} onClose={() => setIsEditing(false)}>
-                <HabitForm habit={props.habit} onClose={() => setIsEditing(false)} />
-            </Modal>
+            <Dialog open={isEditing} onClose={() => setIsEditing(false)}>
+                <DialogContent>
+                    <HabitForm habit={props.habit} onClose={() => setIsEditing(false)} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setIsEditing(false)} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
