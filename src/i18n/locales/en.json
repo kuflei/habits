@@ -18,5 +18,6 @@
   "save": "Save",
   "add": "Add habit",
   "cancel": "Cancel",
-  "noFutureDates": "You cannot click on future dates!"
+  "noFutureDates": "You cannot click on future dates!",
+  "wishlist": "Wishlist"
 }

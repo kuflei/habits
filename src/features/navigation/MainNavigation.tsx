@@ -21,6 +21,7 @@ export default function MainNavigation() {
                     LOGO
                 </Typography>
                 <Button color="inherit" component={Link} to="/habits" sx={{mr: 2}}>{t("habits")}</Button>
+                <Button color="inherit" component={Link} to="/wishlist" sx={{mr: 2}}>{t("wishlist")}</Button>
                 <ButtonGroup variant="contained" aria-label="Basic button group">
                     <Button
                         sx={{

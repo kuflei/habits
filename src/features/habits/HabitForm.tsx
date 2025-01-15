@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {Button, FormControl, FormHelperText, Typography, TextField} from '@mui/material';
+import {Button, FormControl, FormHelperText, Typography, TextField, InputLabel, Select, MenuItem} from '@mui/material';
 import { Habit } from '@/types/Habit.ts';
 import { useHabitStore } from '@/store/useHabitStore';
 import { today } from '@/utils/date';
@@ -17,6 +17,7 @@ interface HabitFormProps {
 const HabitForm: React.FC<HabitFormProps> = (props) => {
     const addHabit = useHabitStore((state) => state.addHabit);
     const updateHabit = useHabitStore((state) => state.updateHabit);
+    const rewardsList = useHabitStore((state) => state.rewardsList);
     const { t } = useTranslation();
     const formik = useFormik({
         initialValues: {
@@ -24,7 +25,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
             startDate: props.habit?.startDate || '',
             endDate: props.habit?.endDate || '',
             frequency: props.habit?.frequency || 1,
-            reward: props.habit?.reward || '',
+            reward: props.habit?.reward || (rewardsList.length > 0 ? rewardsList[0].name : ''),
         },
         validate,
         onSubmit: (values) => {
@@ -48,7 +49,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
     return (
         <form onSubmit={formik.handleSubmit}>
             <Typography variant="h5" sx={{ mb: 3 }}>{props.habit ? t("editHabit") : t("addHabit")}</Typography>
-            <FormControl fullWidth={true} margin="normal">
+            <FormControl fullWidth margin="normal">
                 <TextField label={t("habitName")} variant="outlined"
                        type="text"
                        name="name"
@@ -60,7 +61,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
                     <FormHelperText>{formik.errors.name}</FormHelperText>
                 )}
             </FormControl>
-            <FormControl fullWidth={true} margin="normal">
+            <FormControl fullWidth margin="normal">
                 <InputDate
                     label={t("startDate")}
                     name="startDate"
@@ -72,7 +73,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
                     <FormHelperText>{formik.errors.startDate}</FormHelperText>
                 )}
             </FormControl>
-            <FormControl fullWidth={true} margin="normal">
+            <FormControl fullWidth margin="normal">
                 <InputDate
                     label={t("endDate")}
                     name="endDate"
@@ -84,7 +85,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
                     <FormHelperText>{formik.errors.endDate}</FormHelperText>
                 )}
             </FormControl>
-            <FormControl fullWidth={true} margin="normal">
+            <FormControl fullWidth margin="normal">
                 <TextField label={t("frequency")} variant="outlined"
                     type="number"
                     name="frequency"
@@ -96,14 +97,20 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
                     <FormHelperText>{formik.errors.frequency}</FormHelperText>
                 )}
             </FormControl>
-            <FormControl fullWidth={true} margin="normal">
-                <TextField label={t("reward")} variant="outlined"
-                    type="text"
+            <FormControl fullWidth margin="normal">
+                <TextField
+                    select
+                    label={t("reward")}
                     name="reward"
-                    placeholder={t("rewardPlaceholder")}
                     value={formik.values.reward}
-                    onChange={formik.handleChange}
-                />
+                    onChange={(event) => formik.setFieldValue("reward", event.target.value)}
+                >
+                    {rewardsList.map((reward) => (
+                        <MenuItem key={reward.id} value={reward.name}>
+                            {reward.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
                 {formik.touched.reward && formik.errors.reward && (
                     <FormHelperText>{formik.errors.reward}</FormHelperText>
                 )}

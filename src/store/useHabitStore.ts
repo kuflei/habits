@@ -8,6 +8,8 @@ interface HabitStore {
     updateHabit: (updatedHabit: Habit) => void;
     deleteHabit: (id: string) => void;
     toggleHabitProgress: (id: string, date: string) => void;
+    rewardsList: string[];
+    setRewardsList: (rewards: string[]) => void;
 }
 // set function to update state
 // state current state
@@ -16,6 +18,8 @@ export const useHabitStore = create(
     persist<HabitStore>(
         (set) => ({
             habits: [],
+            rewardsList: [],
+            setRewardsList: (rewards) => set({ rewardsList: rewards }),
 
             addHabit: (habit) =>
                 set((state) => ({
