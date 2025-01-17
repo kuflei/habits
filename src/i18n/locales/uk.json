@@ -1,5 +1,6 @@
 {
   "habits": "Звички",
+  "allHabits": "Всі звички",
   "habitTracker": "Трекер звичок",
   "added": "Додано!",
   "addNewHabit": "Додати нову звичку",
@@ -19,5 +20,16 @@
   "add": "Додати звичку",
   "cancel": "Скасувати",
   "noFutureDates": "Не можна клікати на майбутні дати!",
-  "wishlist": "Список бажань"
+  "wishlist": "Список бажань",
+  "newWishlistItem": "Додати новий елемент",
+  "close": "Закрити",
+  "addNewWishlistItem": "Додати",
+  "login": "Вхід",
+  "email": "Електронна пошта",
+  "password": "Пароль",
+  "logout": "Вихід",
+  "confirmLogout": "Ви впевнені, що хочете вийти?",
+  "noOptionsAvailable": "Немає доступних опцій",
+  "pleaseLogin": "Будь ласка, увійдіть",
+  "noHabitsAvailable": "Немає доступних звичок"
 }

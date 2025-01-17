@@ -6,6 +6,11 @@ import { BrowserRouter } from 'react-router-dom'
 import './i18n/i18n';
 import App from './App.tsx'
 import './assets/styles/index.css';
+import { makeServer } from '@/mirage/mirage';
+
+if (process.env.NODE_ENV === 'development') {
+    makeServer();
+}
 
 const theme = createTheme()
 

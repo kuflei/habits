@@ -1,5 +1,6 @@
 {
   "habits": "Habits",
+  "allHabits": "All habits",
   "habitTracker": "Habit tracker",
   "added": "Added!",
   "addNewHabit": "Add new habit",
@@ -19,5 +20,16 @@
   "add": "Add habit",
   "cancel": "Cancel",
   "noFutureDates": "You cannot click on future dates!",
-  "wishlist": "Wishlist"
+  "wishlist": "Wishlist",
+  "newWishlistItem": "Add a new item",
+  "close": "Close",
+  "addNewWishlistItem": "Add item",
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "logout": "Logout",
+  "confirmLogout": "Are you sure you want to log out?",
+  "noOptionsAvailable": "No options available",
+  "pleaseLogin": "Please log in",
+  "noHabitsAvailable": "No habits available"
 }

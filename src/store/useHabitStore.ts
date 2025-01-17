@@ -2,12 +2,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Habit } from '../types/Habit';
 
-const rewards = [
-    { id: 1, name: 'New Book' },
-    { id: 2, name: 'Movie Ticket' },
-    { id: 3, name: 'Spa Day' },
-    { id: 4, name: 'Fancy Dinner' },
-];
 
 interface HabitStore {
     habits: Habit[];
@@ -15,8 +9,6 @@ interface HabitStore {
     updateHabit: (updatedHabit: Habit) => void;
     deleteHabit: (id: string) => void;
     toggleHabitProgress: (id: string, date: string) => void;
-    rewardsList: { id: number; name: string }[];
-    initializeRewards: () => void;
 }
 // set function to update state
 // state current state
@@ -26,7 +18,6 @@ export const useHabitStore = create(
         (set) => ({
             habits: [],
             rewardsList: [],
-            initializeRewards: () => set({ rewardsList: rewards }),
 
             addHabit: (habit) =>
                 set((state) => ({

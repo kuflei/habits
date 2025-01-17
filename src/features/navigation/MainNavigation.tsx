@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppBar, Toolbar, Typography, Button, ButtonGroup  } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '@/store/authStore';
+import AuthButton from '@/features/auth/componets/AuthButton';
 
 export default function MainNavigation() {
     const { t, i18n } = useTranslation();
@@ -10,6 +12,7 @@ export default function MainNavigation() {
         i18n.changeLanguage(lng);
         setActiveLanguage(lng);
     };
+    const userId = useAuthStore((state) => state.userId);
     return (
         <AppBar position="static">
             <Toolbar>
@@ -20,8 +23,13 @@ export default function MainNavigation() {
                             sx={{mr: 2, display: { xs: 'none', md: 'flex' }, flexGrow: 1, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none'}}>
                     LOGO
                 </Typography>
-                <Button color="inherit" component={Link} to="/habits" sx={{mr: 2}}>{t("habits")}</Button>
-                <Button color="inherit" component={Link} to="/wishlist" sx={{mr: 2}}>{t("wishlist")}</Button>
+                {userId ? (
+                    <>
+                    <Button color="inherit" component={Link} to="/habits" sx={{mr: 2}}>{t("habits")}</Button>
+                    <Button color="inherit" component={Link} to="/wishlist" sx={{mr: 2}}>{t("wishlist")}</Button>
+                    </>
+                ) : null}
+                <AuthButton />
                 <ButtonGroup variant="contained" aria-label="Basic button group">
                     <Button
                         sx={{

@@ -1,12 +1,13 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {Button, FormControl, FormHelperText, Typography, TextField, InputLabel, Select, MenuItem} from '@mui/material';
+import {Button, FormControl, FormHelperText, Typography, TextField, MenuItem} from '@mui/material';
 import { Habit } from '@/types/Habit.ts';
 import { useHabitStore } from '@/store/useHabitStore';
 import { today } from '@/utils/date';
 import {validate} from "@/utils/validate";
 import InputDate from "@/components/InputDate.tsx";
+import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 
 interface HabitFormProps {
     habit?: Habit;
@@ -15,9 +16,9 @@ interface HabitFormProps {
 }
 
 const HabitForm: React.FC<HabitFormProps> = (props) => {
+    const { wishlist} = useWishlist();
     const addHabit = useHabitStore((state) => state.addHabit);
     const updateHabit = useHabitStore((state) => state.updateHabit);
-    const rewardsList = useHabitStore((state) => state.rewardsList);
     const { t } = useTranslation();
     const formik = useFormik({
         initialValues: {
@@ -25,7 +26,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
             startDate: props.habit?.startDate || '',
             endDate: props.habit?.endDate || '',
             frequency: props.habit?.frequency || 1,
-            reward: props.habit?.reward || (rewardsList.length > 0 ? rewardsList[0].name : ''),
+            reward: props.habit?.reward || (wishlist.length > 0 ? wishlist[0].name : ''),
         },
         validate,
         onSubmit: (values) => {
@@ -102,14 +103,20 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
                     select
                     label={t("reward")}
                     name="reward"
-                    value={formik.values.reward}
+                    value={formik.values.reward || ""}
                     onChange={(event) => formik.setFieldValue("reward", event.target.value)}
                 >
-                    {rewardsList.map((reward) => (
-                        <MenuItem key={reward.id} value={reward.name}>
-                            {reward.name}
+                    {wishlist.length > 0 ? (
+                        wishlist.map((reward) => (
+                            <MenuItem key={reward.id} value={reward.name}>
+                                {reward.name}
+                            </MenuItem>
+                        ))
+                    ) : (
+                        <MenuItem value="">
+                            {t("noOptionsAvailable")}
                         </MenuItem>
-                    ))}
+                    )}
                 </TextField>
                 {formik.touched.reward && formik.errors.reward && (
                     <FormHelperText>{formik.errors.reward}</FormHelperText>
