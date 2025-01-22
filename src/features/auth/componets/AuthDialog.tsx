@@ -12,10 +12,10 @@ interface AuthDialogProps {
 const AuthDialog: React.FC<AuthDialogProps> = (props) => {
     const { t } = useTranslation();
     const { handleLogin, handleLogout } = useAuth();
-    const [email, setEmail] = useState('john@example.com');
-    const [password, setPassword] = useState('123');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
-
+    /*TODO: replace with formik*/
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -35,6 +35,7 @@ const AuthDialog: React.FC<AuthDialogProps> = (props) => {
 
     return (
         <Dialog open={props.isOpen} onClose={props.onClose}>
+            {/*TODO: make title as const*/}
             <DialogTitle>{props.isLoginMode ? t('login') : t('logout')}</DialogTitle>
             <form onSubmit={onSubmit}>
                 <DialogContent>

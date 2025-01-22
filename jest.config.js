@@ -7,7 +7,7 @@ export default {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
-    '^@testing-library/user-event$': '<rootDir>/node_modules/@testing-library/user-event/dist/index.js',
+    '^@testing-library/user-event$': '<rootDir>/node_modules/@testing-library/user-event',
   },
 
 };

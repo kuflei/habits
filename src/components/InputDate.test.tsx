@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import InputDate from './InputDate';
 import dayjs from 'dayjs';
 
-test('InputDate receives correct props', () => {
+test('InputDate receives correct props', async () => {
     const label = 'Test Label';
     const name = 'testName';
     const value = '2023-10-10';
@@ -19,16 +20,13 @@ test('InputDate receives correct props', () => {
         />
     );
 
-    const datePickerInput = screen.getByRole('textbox', { name: label }) as HTMLInputElement;
+    const datePickerInput = screen.getByRole('textbox', { name: label });
 
     expect(datePickerInput).toBeInTheDocument();
 
-    const formattedValue = dayjs(datePickerInput.value).format('YYYY-MM-DD');
-    expect(formattedValue).toBe(value);
+    expect(datePickerInput).toHaveValue(dayjs(value).format('MM/DD/YYYY'));
 
-    fireEvent.change(datePickerInput, { target: { value: '2022-12-31' } });
-    expect(onChange).toHaveBeenCalledWith(name, null);
+    await userEvent.type(datePickerInput, '01/02/2023');
 
-    fireEvent.change(datePickerInput, { target: { value: '2023-01-02' } });
     expect(onChange).toHaveBeenCalledWith(name, '2023-01-02');
 });

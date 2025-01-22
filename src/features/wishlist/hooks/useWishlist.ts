@@ -22,6 +22,7 @@ export const useWishlist = () => {
                 setLoading(false);
             }
         };
+        /*TODO: removed userId*/
         if (userId) {
             loadWishList();
         }

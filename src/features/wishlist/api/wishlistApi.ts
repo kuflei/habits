@@ -1,8 +1,10 @@
 import { getUserId } from '@/utils/getUserId';
-
+/*TODO: fetch only fetch (http client)*/
 export const fetchWishlist = async () => {
     const userId = getUserId();
+    /*TODO: make adapter storage*/
     const storedWishList = localStorage.getItem(`wishlist_${userId}`);
+    /*TODO: add handle error*/
     const localWishList = storedWishList ? JSON.parse(storedWishList) : [];
     const localArrayWishList = Array.isArray(localWishList) ? localWishList : [localWishList];
 

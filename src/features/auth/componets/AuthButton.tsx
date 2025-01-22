@@ -7,12 +7,13 @@ import { useAuthStore } from '@/store/authStore';
 const AuthButton: React.FC = () => {
     const { t } = useTranslation();
     const userId = useAuthStore((state) => state.userId);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [isLoginMode, setIsLoginMode] = useState(true);
-
+    /*TODO: move userID*/
+   /* TODO: make login logout*/
     const toggleDialog = (mode: 'login' | 'logout') => {
         setIsLoginMode(mode === 'login');
-        setIsDialogOpen(true);
+        setIsOpen(true);
     };
 
     return (
@@ -23,9 +24,9 @@ const AuthButton: React.FC = () => {
                 {userId ? t('logout') : t('login')}
             </Button>
             <AuthDialog
-                isOpen={isDialogOpen}
+                isOpen={isOpen}
                 isLoginMode={isLoginMode}
-                onClose={() => setIsDialogOpen(false)}
+                onClose={() => setIsOpen(false)}
             />
         </>
     );
