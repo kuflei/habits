@@ -1,33 +1,25 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import AuthDialog from './AuthDialog';
 import { useAuthStore } from '@/store/authStore';
+import LogoutDialog from "./LogoutDialog.tsx";
+import LoginDialog from "./LoginDialog.tsx";
 
 const AuthButton: React.FC = () => {
     const { t } = useTranslation();
-    const userId = useAuthStore((state) => state.userId);
+    const isAuthenticated = useAuthStore((state) => !!state.userId);
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoginMode, setIsLoginMode] = useState(true);
-    /*TODO: move userID*/
-   /* TODO: make login logout*/
-    const toggleDialog = (mode: 'login' | 'logout') => {
-        setIsLoginMode(mode === 'login');
-        setIsOpen(true);
-    };
+
+    const toggleDialog = () => setIsOpen((prev) => !prev);
+
+    const DialogComponent = isAuthenticated ? LogoutDialog : LoginDialog;
 
     return (
         <>
-            <Button sx={{mr: 2}}
-                color="inherit"
-                onClick={() => toggleDialog(userId ? 'logout' : 'login')}>
-                {userId ? t('logout') : t('login')}
+            <Button sx={{ mr: 2 }} color="inherit" onClick={toggleDialog}>
+                {t(isAuthenticated ? 'logout' : 'login')}
             </Button>
-            <AuthDialog
-                isOpen={isOpen}
-                isLoginMode={isLoginMode}
-                onClose={() => setIsOpen(false)}
-            />
+            <DialogComponent isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </>
     );
 };
