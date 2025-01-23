@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import {apiRequests, addData, deleteData} from "../features/api/apiRequests";
+import {persist} from "zustand/middleware";
 
 interface WishlistItem {
     id: string;
@@ -14,59 +16,46 @@ interface WishlistStore {
     loading: boolean;
 }
 
-export const useWishlistStore = create<WishlistStore>((set) => ({
-    wishlist: [],
-    error: null,
-    loading: false,
+export const useWishlistStore = create(
+    persist<WishlistStore>(
+        (set) => ({
+            wishlist: [],
+            error: null,
+            loading: false,
 
-    fetchWishlist: async (userId: string) => {
-        set({ loading: true, error: null });
-        try {
-            const response = await fetch(`/api/wishlist?userId=${userId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch wishlist');
-            }
-            const data = await response.json();
-            set({ wishlist: data, loading: false });
-        } catch (err) {
-            set({ error: (err as Error).message, loading: false });
-        }
-    },
+            fetchWishlist: async (userId: string) => {
+                const url = `/api/wishlist?userId=${userId}`;
+                await apiRequests(url, set, {
+                    onSuccess: (data) => set({ wishlist: data, loading: false }),
+                    onError: (error) => console.error('Error fetching wishlist:', error),
+                });
+            },
 
-    addItem: async (userId: string, item: WishlistItem) => {
-        set({ error: null });
-        try {
-            const response = await fetch(`/api/wishlist`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, item }),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add item');
-            }
-            const newItem = await response.json();
-            set((state) => ({
-                wishlist: [...state.wishlist, newItem],
-            }));
-        } catch (err) {
-            set({ error: (err as Error).message });
-        }
-    },
+            addItem: async (userId: string, item: WishlistItem) => {
+                const url = '/api/wishlist';
+                const payload = { userId, item };
 
-    removeItem: async (userId: string, itemId: string) => {
-        set({ error: null });
-        try {
-            const response = await fetch(`/api/wishlist/${itemId}?userId=${userId}`, {
-                method: 'DELETE',
-            });
-            if (!response.ok) {
-                throw new Error('Failed to remove item');
-            }
-            set((state) => ({
-                wishlist: state.wishlist.filter((item) => item.id !== itemId),
-            }));
-        } catch (err) {
-            set({ error: (err as Error).message });
-        }
-    },
-}));
+                await addData(url, payload, set, {
+                    onSuccess: (newItem) =>
+                        set((state) => ({
+                            wishlist: [...state.wishlist, newItem],
+                        })),
+                    onError: (error) => set({ error }),
+                });
+            },
+            removeItem: async (userId: string, itemId: string) => {
+                const url = `/api/wishlist/${itemId}?userId=${userId}`;
+
+                await deleteData(url, set, {
+                    filterState: (state) => ({
+                        ...state,
+                        wishlist: state.wishlist.filter((item) => item.id !== itemId),
+                    }),
+                    onError: (error) => set({ error }),
+                });
+            },
+
+        }),
+        { name: 'wishlist-storage' }
+    )
+);
