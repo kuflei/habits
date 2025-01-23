@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
-import { Button, Card, CardContent, Dialog, DialogActions, DialogContent, Typography, FormControl, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, CardContent, Typography, FormControl, Dialog, DialogContent, DialogActions, TextField } from '@mui/material';
+import { useWishlistStore } from '@/store/wishlistStore';
 import {useTranslation} from "react-i18next";
-import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
+import {useAuthStore} from "@/store/authStore.ts";
 
 const Wishlist = () => {
-    const { wishlist, loading, error, addItem, removeItem } = useWishlist();
-    const [newItem, setNewItem] = useState<string>('');
+    const { wishlist, fetchWishlist, addItem, removeItem, loading, error } = useWishlistStore();
+    const [newItem, setNewItem] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const userId = useAuthStore((state) => state.userId);
     const { t } = useTranslation();
+
+    useEffect(() => {
+        fetchWishlist(userId);
+    }, [fetchWishlist, userId]);
 
     const handleAdd = () => {
         if (newItem.trim()) {
-            addItem({ id: Date.now().toString(), name: newItem });
+            addItem(userId, { id: Date.now().toString(), name: newItem });
             setNewItem('');
+            setIsModalOpen(false);
         }
     };
 
@@ -31,7 +38,7 @@ const Wishlist = () => {
                     <Button
                         sx={{ mb: 4 }}
                         variant="contained"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(userId, item.id)}
                     >
                         {t("delete")}
                     </Button>
