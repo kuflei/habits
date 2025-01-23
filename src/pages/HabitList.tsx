@@ -1,27 +1,15 @@
-import React from 'react';
-import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import { useHabitStore } from '@/store/useHabitStore';
 import HabitItem from '@/pages/HabitItem';
-import {useAuthStore} from "@/store/authStore.ts";
+import { useAuthStore} from "@/store/authStore";
+import { useHabits } from '@/features/habits/hooks/useHabits';
 
 const HabitList = () => {
     const userId = useAuthStore((state) => state.userId);
-    const habits = useHabitStore((state) => state.habits);
-    const fetchHabits = useHabitStore((state) => state.fetchHabits);
+    const habits = useHabits(userId);
     const { t } = useTranslation();
 
-    useEffect(() => {
-        if (userId) {
-            console.log('Fetching habits for userId:', userId);
-            fetchHabits(userId);
-        } else {
-            console.error('No userId provided');
-        }
-    }, [userId, fetchHabits]);
-
-    if (!Array.isArray(habits)) {
-        return <p>No habits available.</p>;
+    if (!Array.isArray(habits) || habits.length === 0) {
+        return <p>{t('noHabitsAvailable')}</p>;
     }
 
     return (

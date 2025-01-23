@@ -3,7 +3,6 @@ export const fetchData = async (
     setState: (state) => void,
     options: { onSuccess: (data: any) => void; onError: (error: string) => void }
 ): Promise<void> => {
-    setState({ loading: true, error: null });
     try {
         const response = await fetch(url);
         if (!response.ok) {

@@ -6,9 +6,9 @@ import { Habit } from '@/types/Habit.ts';
 import { useHabitStore } from '@/store/useHabitStore';
 import { today } from '@/utils/date';
 import {validate} from "@/utils/validate";
-import InputDate from "@/components/InputDate.tsx";
-import { useWishlistStore } from '@/store/wishlistStore';
-import {useAuthStore} from "@/store/authStore.ts";
+import InputDate from "@/components/InputDate";
+import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
+import {useAuthStore} from "@/store/authStore";
 
 interface HabitFormProps {
     habit?: Habit;
@@ -18,7 +18,7 @@ interface HabitFormProps {
 
 const HabitForm: React.FC<HabitFormProps> = (props) => {
     const userId = useAuthStore((state) => state.userId);
-    const { wishlist } = useWishlistStore();
+    const { wishlist } = useWishlist();
     const addHabit = useHabitStore((state) => state.addHabit);
     const updateHabit = useHabitStore((state) => state.updateHabit);
     const { t } = useTranslation();

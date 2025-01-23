@@ -1,54 +1,22 @@
-import { useEffect, useState } from 'react';
-import { fetchWishlist, addToWishlist, removeFromWishlist } from '../api/wishlistApi';
+import { useEffect } from 'react';
+import { useWishlistStore } from '@/store/wishlistStore';
 import { useAuthStore } from '@/store/authStore';
-import { WishlistItem } from '@/types/WishlistItem';
 
 export const useWishlist = () => {
     const userId = useAuthStore((state) => state.userId);
-    const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const { wishlist, fetchWishlist, addItem, removeItem, loading, error } = useWishlistStore();
 
     useEffect(() => {
-        const loadWishList  = async () => {
-            try {
-                setLoading(true);
-                const data = await fetchWishlist();
-                setWishlist(data);
-                setError(null);
-            } catch (err){
-                setError((err as Error).message)
-            } finally {
-                setLoading(false);
-            }
-        };
-        /*TODO: removed userId*/
         if (userId) {
-            loadWishList();
+            fetchWishlist(userId);
         }
+    }, [fetchWishlist, userId]);
 
-    }, [userId]);
-
-    const addItem = async (item: WishlistItem) => {
-        try {
-            const newItem = await addToWishlist(item);
-            setWishlist((prev) => [...prev, newItem]);
-            setError(null);
-        } catch (err) {
-            setError((err as Error).message)
-        }
-
-    }
-    const removeItem = async (itemId: string) => {
-        try {
-            await removeFromWishlist(itemId);
-            setWishlist((prev) => prev.filter((item) => item.id !== itemId));
-            setError(null);
-        } catch (err) {
-            setError((err as Error).message)
-        }
-    }
-
-    return { wishlist, loading, error, addItem, removeItem };
+    return {
+        wishlist,
+        loading,
+        error,
+        addItem: (item) => addItem(userId, item),
+        removeItem: (itemId) => removeItem(userId, itemId),
+    };
 };
-
