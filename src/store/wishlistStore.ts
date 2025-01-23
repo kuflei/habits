@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import {apiRequests, addData, deleteData} from "../features/api/apiRequests";
+import {fetchData, addData, deleteData} from "../features/api/apiRequests";
 import {persist} from "zustand/middleware";
 
 interface WishlistItem {
@@ -25,7 +25,7 @@ export const useWishlistStore = create(
 
             fetchWishlist: async (userId: string) => {
                 const url = `/api/wishlist?userId=${userId}`;
-                await apiRequests(url, set, {
+                await fetchData(url, set, {
                     onSuccess: (data) => set({ wishlist: data, loading: false }),
                     onError: (error) => console.error('Error fetching wishlist:', error),
                 });

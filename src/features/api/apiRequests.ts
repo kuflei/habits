@@ -1,4 +1,4 @@
-export const apiRequests = async (
+export const fetchData = async (
     url: string,
     setState: (state) => void,
     options: { onSuccess: (data: any) => void; onError: (error: string) => void }
@@ -71,7 +71,7 @@ export const updateData = async (
 };
 export const deleteData = async <T>(
     url: string,
-    setState: (state: Partial<T>) => void,
+    setState: (state: T) => void,
     options: {
         filterState: (state: T) => T;
         onError?: (error: string) => void;

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Habit } from '../types/Habit';
-import {apiRequests, addData, updateData, deleteData} from "../features/api/apiRequests";
+import {fetchData, addData, updateData, deleteData} from "../features/api/apiRequests";
 
 
 interface HabitStore {
@@ -17,7 +17,7 @@ interface HabitStore {
 // we get current state and return new obj
 export const useHabitStore = create(
     persist<HabitStore>(
-        (set, get) => ({
+        (set) => ({
             habits: [],
             fetchHabits: async (userId: string) => {
                 if (!userId) {
@@ -26,7 +26,7 @@ export const useHabitStore = create(
                     return;
                 }
                 const url = `/api/habits?userId=${userId}`;
-                await apiRequests(url, set, {
+                await fetchData(url, set, {
                     onSuccess: (data) => set({ habits: data }),
                     onError: (error) => console.error('Error fetching habits:', error),
                 });
