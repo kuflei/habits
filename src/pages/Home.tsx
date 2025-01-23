@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {Button, Dialog, DialogContent, DialogActions, Snackbar, Alert, Typography, Card} from "@mui/material";
 import HabitForm from '@/features/habits/HabitForm';
@@ -9,6 +9,9 @@ const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const { t } = useTranslation();
+    const userId = useAuthStore((state) => state.userId);
+    const fetchHabits = useHabitStore((state) => state.fetchHabits);
+    const habits = useHabitStore((state) => state.habits);
     const cssButton = {
         backgroundColor: '#4caf50',
         color: '#fff',
@@ -24,8 +27,12 @@ const Home: React.FC = () => {
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
     }
-    const userId = useAuthStore((state) => state.userId);
-    const habits = useHabitStore((state) => state.habits);
+
+    useEffect(() => {
+        if (userId) {
+            fetchHabits(userId);
+        }
+    }, [userId, fetchHabits]);
 
     return (
         <div className="home-page">

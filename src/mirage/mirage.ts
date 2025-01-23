@@ -9,22 +9,29 @@ export function makeServer({ environment = 'development' } = {}) {
                 users: [
                     {
                         id: '1',
-                        name: 'John Doe',
+                        name: 'Piter',
                         email: 'john@example.com',
                         password: '123',
+                        habits: [
+                            { id: '101', name: "Piter Exercise", startDate: "2025-01-01", endDate: "2025-01-12", frequency: 1, reward: "New Shoes", progress: {} },
+                            { id: '102', name: "Piter Exercise2", startDate: "2025-01-01", endDate: "2025-01-10", frequency: 3, reward: "New Shoes", progress: {} },
+                        ],
                         wishlist: [
-                            { id: '101', name: 'New Book' },
-                            { id: '102', name: 'Movie Ticket' },
+                            { id: '111', name: 'Piter New Book' },
+                            { id: '112', name: ' PiterMovie Ticket' },
                         ],
                     },
                     {
                         id: '2',
-                        name: 'John Doe 2',
+                        name: 'Parker',
                         email: 'john2@example.com',
                         password: '12345',
+                        habits: [
+                            { id: '201', name: "Parker Exercise", startDate: "2025-01-01", endDate: "2025-2-31", frequency: 4, reward: "Movie", progress: {} },
+                        ],
                         wishlist: [
-                            { id: '201', name: 'New Book' },
-                            { id: '202', name: 'Movie Ticket' },
+                            { id: '221', name: 'Parker New Book' },
+                            { id: '222', name: 'Parker Movie Ticket' },
                         ],
                     },
                 ],
@@ -91,6 +98,76 @@ export function makeServer({ environment = 'development' } = {}) {
                 schema.db.users.update(userId, { wishlist: user.wishlist });
 
                 return { message: 'Item deleted successfully' };
+            });
+
+            this.get('/habits', (schema, request) => {
+                const userId = request.queryParams.userId;
+                console.log('Requested userId:', userId); // Логування userId
+
+                const user = schema.db.users.find(userId);
+
+                if (!user) {
+                    console.log('User not found for id:', userId);
+                    return new Response(404, {}, { error: 'User not found' });
+                }
+
+                console.log('User habits:', user.habits); // Логування звичок користувача
+                return user.habits;
+            });
+            this.patch('/habits/:id', (schema, request) => {
+                const id = request.params.id;
+                const { habit, userId } = JSON.parse(request.requestBody);
+
+                console.log('Updating progress for habit ID:', id);
+                console.log('User ID:', userId);
+
+                const user = schema.db.users.find(userId);
+
+                if (!user) {
+                    return new Response(404, {}, { error: 'User not found' });
+                }
+
+                const habitIndex = user.habits.findIndex((h) => h.id === id);
+
+                if (habitIndex === -1) {
+                    return new Response(404, {}, { error: 'Habit not found' });
+                }
+
+                // Оновлюємо прогрес звички
+                user.habits[habitIndex] = { ...user.habits[habitIndex], ...habit };
+                schema.db.users.update(userId, { habits: user.habits });
+
+                return user.habits[habitIndex];
+            });
+
+
+            this.post('/habits', (schema, request) => {
+                const { userId, habit } = JSON.parse(request.requestBody);
+                const user = schema.db.users.find(userId);
+
+                if (!user) {
+                    return new Response(404, {}, { error: 'User not found' });
+                }
+
+                user.habits.push(habit);
+                schema.db.users.update(userId, { habits: user.habits });
+
+                return habit;
+            });
+
+            this.delete('/habits/:id', (schema, request) => {
+                const habitId = request.params.id;
+                const userId = request.queryParams.userId;
+                const user = schema.db.users.find(userId);
+
+                if (!user) {
+                    return new Response(404, {}, { error: 'User not found' });
+                }
+
+                user.habits = user.habits.filter((habit) => habit.id !== habitId);
+                schema.db.users.update(userId, { habits: user.habits });
+
+                return { message: 'Habit deleted successfully' };
             });
         },
     });

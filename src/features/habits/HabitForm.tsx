@@ -8,6 +8,7 @@ import { today } from '@/utils/date';
 import {validate} from "@/utils/validate";
 import InputDate from "@/components/InputDate.tsx";
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
+import {useAuthStore} from "@/store/authStore.ts";
 
 interface HabitFormProps {
     habit?: Habit;
@@ -16,6 +17,7 @@ interface HabitFormProps {
 }
 
 const HabitForm: React.FC<HabitFormProps> = (props) => {
+    const userId = useAuthStore((state) => state.userId);
     const { wishlist} = useWishlist();
     const addHabit = useHabitStore((state) => state.addHabit);
     const updateHabit = useHabitStore((state) => state.updateHabit);
@@ -29,16 +31,16 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
             reward: props.habit?.reward || (wishlist.length > 0 ? wishlist[0].name : ''),
         },
         validate,
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             if (props.habit) {
-                updateHabit({ ...props.habit, ...values });
+                updateHabit({ ...props.habit, ...values }, userId);
             } else {
                 const newHabit = {
                     id: Date.now().toString(),
                     ...values,
                     progress: {},
                 };
-                addHabit(newHabit);
+                addHabit(newHabit, userId);
             }
             if (props.onSubmit) {
                 props.onSubmit();

@@ -44,7 +44,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
         <Grid container spacing={1} sx={{ mt: 2 }}>
             {dateRange.map((date) => {
                 return (
-                    <Grid size={{ xs: 2, md: 1 }} key={date}>
+                    <Grid size={{ xs: 2, md: 1 }} key={`habit-${props.habit.id}-${date}`}>
                         <Paper
                             onClick={() => handleDateClick(date)}
                             sx={cssPaper}
