@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import {fetchData, addData, deleteData} from "../features/api/apiRequests";
-import {persist} from "zustand/middleware";
+import { persist } from 'zustand/middleware';
+import { createHttpClient } from "@/features/api/httpClient";
 
 interface WishlistItem {
     id: string;
@@ -16,6 +16,8 @@ interface WishlistStore {
     loading: boolean;
 }
 
+const httpClient = createHttpClient('/api');
+
 export const useWishlistStore = create(
     persist<WishlistStore>(
         (set) => ({
@@ -24,37 +26,38 @@ export const useWishlistStore = create(
             loading: false,
 
             fetchWishlist: async (userId: string) => {
-                const url = `/api/wishlist?userId=${userId}`;
-                await fetchData(url, set, {
-                    onSuccess: (data) => set({ wishlist: data, loading: false }),
-                    onError: (error) => console.error('Error fetching wishlist:', error),
-                });
+                set({ loading: true, error: null });
+                try {
+                    const data = await httpClient.get<WishlistItem[]>(`/wishlist?userId=${userId}`);
+                    set({ wishlist: data, loading: false });
+                } catch (error) {
+                    set({ error: (error as Error).message, loading: false });
+                }
             },
 
             addItem: async (userId: string, item: WishlistItem) => {
-                const url = '/api/wishlist';
-                const payload = { userId, item };
-
-                await addData(url, payload, set, {
-                    onSuccess: (newItem) =>
-                        set((state) => ({
-                            wishlist: [...state.wishlist, newItem],
-                        })),
-                    onError: (error) => set({ error }),
-                });
+                set({ error: null });
+                try {
+                    const newItem = await httpClient.post<WishlistItem>(`/wishlist`, { userId, item });
+                    set((state) => ({
+                        wishlist: [...state.wishlist, newItem],
+                    }));
+                } catch (error) {
+                    set({ error: (error as Error).message });
+                }
             },
+
             removeItem: async (userId: string, itemId: string) => {
-                const url = `/api/wishlist/${itemId}?userId=${userId}`;
-
-                await deleteData(url, set, {
-                    filterState: (state) => ({
-                        ...state,
+                set({ error: null });
+                try {
+                    await httpClient.delete(`/wishlist/${itemId}?userId=${userId}`);
+                    set((state) => ({
                         wishlist: state.wishlist.filter((item) => item.id !== itemId),
-                    }),
-                    onError: (error) => set({ error }),
-                });
+                    }));
+                } catch (error) {
+                    set({ error: (error as Error).message });
+                }
             },
-
         }),
         { name: 'wishlist-storage' }
     )

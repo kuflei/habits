@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Habit } from '../types/Habit';
-import {fetchData, addData, updateData, deleteData} from "../features/api/apiRequests";
-
+import { Habit } from '@/types/Habit';
+import {createHttpClient} from "@/features/api/httpClient";
+const httpClient = createHttpClient('/api');
 
 interface HabitStore {
     habits: Habit[];
@@ -19,58 +19,55 @@ export const useHabitStore = create(
     persist<HabitStore>(
         (set) => ({
             habits: [],
+
             fetchHabits: async (userId: string) => {
-                if (!userId) {
-                    console.error('No userId provided to fetchHabits');
-                    set({ habits: [] });
-                    return;
+                try {
+                    const habits = await httpClient.get<Habit[]>(`/habits?userId=${userId}`);
+                    set({ habits });
+                } catch (error) {
+                    console.error('Error fetching habits:', error);
                 }
-                const url = `/api/habits?userId=${userId}`;
-                await fetchData(url, set, {
-                    onSuccess: (data) => set({ habits: data }),
-                    onError: (error) => console.error('Error fetching habits:', error),
-                });
-            },
-            addHabit: async (habit, userId) => {
-                const url = '/api/habits';
-                const payload = { userId, habit };
-
-                await addData(url, payload, set, {
-                    onSuccess: (newHabit) =>
-                        set((state) => ({
-                            habits: [...state.habits, newHabit],
-                        })),
-                    onError: (error) => console.error('Error adding habit:', error),
-                });
-            },
-            updateHabit: async (updatedHabit: Habit, userId: string) => {
-                const url = `/api/habits/${updatedHabit.id}`;
-                const payload = { userId, habit: updatedHabit };
-
-                await updateData(url, payload, set, {
-                    onSuccess: (updated: Habit) =>
-                        set((state) => ({
-                            habits: state.habits.map((habit) =>
-                                habit.id === updated.id ? updated : habit
-                            ),
-                        })),
-                    onError: (error) => console.error('Error updating habit:', error),
-                });
             },
 
-            deleteHabit: async (id, userId) => {
-                const url = `/api/habits/${id}?userId=${userId}`;
-
-                await deleteData(url, set, {
-                    filterState: (state) => ({
-                        ...state,
-                        habits: state.habits.filter((habit) => habit.id !== id),
-                    }),
-                    onError: (error) => console.error('Error deleting habit:', error),
-                });
+            addHabit: async (userId: string, habit: Habit) => {
+                try {
+                    const newHabit = await httpClient.post<Habit>(`/habits`, { userId, habit });
+                    set((state) => ({
+                        habits: [...state.habits, newHabit],
+                    }));
+                } catch (error) {
+                    console.error('Error adding habit:', error);
+                }
             },
 
-            toggleHabitProgress: async (id, date) => {
+            updateHabit: async (userId: string, updatedHabit: Habit) => {
+                try {
+                    const updated = await httpClient.patch<Habit>(`/habits/${updatedHabit.id}`, {
+                        userId,
+                        habit: updatedHabit,
+                    });
+                    set((state) => ({
+                        habits: state.habits.map((habit) =>
+                            habit.id === updated.id ? updated : habit
+                        ),
+                    }));
+                } catch (error) {
+                    console.error('Error updating habit:', error);
+                }
+            },
+
+            deleteHabit: async (habitId: string, userId: string) => {
+                try {
+                    await httpClient.delete(`/habits/${habitId}?userId=${userId}`);
+                    set((state) => ({
+                        habits: state.habits.filter((habit) => habit.id !== habitId),
+                    }));
+                } catch (error) {
+                    console.error('Error deleting habit:', error);
+                }
+            },
+
+            toggleHabitProgress: (id: string, date: string) => {
                 set((state) => {
                     const habit = state.habits.find((habit) => habit.id === id);
 
@@ -91,7 +88,6 @@ export const useHabitStore = create(
                     };
                 });
             },
-
         }),
         { name: 'habit-storage' }
     )
