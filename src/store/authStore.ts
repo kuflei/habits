@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import createStorage from '@/features/api/storageService';
-const localStore = createStorage('localStorage');
+import { useStorage } from '@/features/hooks/useStorage';
 
 interface AuthState {
     userId: string | null;
@@ -10,14 +9,36 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-    userId: localStore.getItem('userId'),
+    userId: null,
     token: null,
-    setUserId: (id) => {
-        localStore.setItem('userId', id);
+
+    setUserId: (id: string) => {
         set({ userId: id });
     },
+
     clearAuth: () => {
-        localStore.removeItem('userId');
         set({ userId: null, token: null });
     },
 }));
+
+export const useAuthWithStorage = () => {
+    const storage = useStorage('local');
+    const { userId, setUserId, clearAuth } = useAuthStore();
+
+    const setUserIdWithStorage = (id: string) => {
+        storage.setItem('userId', id);
+        setUserId(id);
+    };
+
+    const clearAuthWithStorage = () => {
+        storage.removeItem('userId');
+        clearAuth();
+    };
+
+    return {
+        userId: storage.getItem<string>('userId') || userId,
+        setUserId: setUserIdWithStorage,
+        clearAuth: clearAuthWithStorage,
+    };
+};
+
