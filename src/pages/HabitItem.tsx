@@ -72,7 +72,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setIsEditing(false)} color="primary">
-                        Close
+                        {t("close")}
                     </Button>
                 </DialogActions>
             </Dialog>

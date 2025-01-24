@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import queryString from 'query-string';
 import { Habit } from '@/types/Habit';
 import {createHttpClient} from "@/features/api/httpClient";
 const httpClient = createHttpClient('/api');
@@ -22,7 +23,9 @@ export const useHabitStore = create(
 
             fetchHabits: async (userId: string) => {
                 try {
-                    const habits = await httpClient.get<Habit[]>(`/habits?userId=${userId}`);
+                    const query = queryString.stringify({ userId });
+                    const url = `/habits?${query}`;
+                    const habits = await httpClient.get<Habit[]>(url);
                     set({ habits });
                 } catch (error) {
                     console.error('Error fetching habits:', error);
@@ -31,7 +34,8 @@ export const useHabitStore = create(
 
             addHabit: async (userId: string, habit: Habit) => {
                 try {
-                    const newHabit = await httpClient.post<Habit>(`/habits`, { userId, habit });
+                    const url = `/habits`;
+                    const newHabit = await httpClient.post<Habit>(url, { userId, habit });
                     set((state) => ({
                         habits: [...state.habits, newHabit],
                     }));
@@ -42,7 +46,8 @@ export const useHabitStore = create(
 
             updateHabit: async (userId: string, updatedHabit: Habit) => {
                 try {
-                    const updated = await httpClient.patch<Habit>(`/habits/${updatedHabit.id}`, {
+                    const url = `/habits/${updatedHabit.id}`;
+                    const updated = await httpClient.patch<Habit>(url, {
                         userId,
                         habit: updatedHabit,
                     });
@@ -58,7 +63,9 @@ export const useHabitStore = create(
 
             deleteHabit: async (habitId: string, userId: string) => {
                 try {
-                    await httpClient.delete(`/habits/${habitId}?userId=${userId}`);
+                    const query = queryString.stringify({ userId });
+                    const url = `/habits/${habitId}?${query}`;
+                    await httpClient.delete(url);
                     set((state) => ({
                         habits: state.habits.filter((habit) => habit.id !== habitId),
                     }));

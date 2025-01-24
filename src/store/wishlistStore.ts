@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import queryString from 'query-string';
 import { createHttpClient } from "@/features/api/httpClient";
 
 interface WishlistItem {
@@ -28,7 +29,9 @@ export const useWishlistStore = create(
             fetchWishlist: async (userId: string) => {
                 set({ loading: true, error: null });
                 try {
-                    const data = await httpClient.get<WishlistItem[]>(`/wishlist?userId=${userId}`);
+                    const query = queryString.stringify({ userId });
+                    const url = `/wishlist?${query}`;
+                    const data = await httpClient.get<WishlistItem[]>(url);
                     set({ wishlist: data, loading: false });
                 } catch (error) {
                     set({ error: (error as Error).message, loading: false });
@@ -38,7 +41,8 @@ export const useWishlistStore = create(
             addItem: async (userId: string, item: WishlistItem) => {
                 set({ error: null });
                 try {
-                    const newItem = await httpClient.post<WishlistItem>(`/wishlist`, { userId, item });
+                    const url = `/wishlist`;
+                    const newItem = await httpClient.post<WishlistItem>(url, { userId, item });
                     set((state) => ({
                         wishlist: [...state.wishlist, newItem],
                     }));
@@ -50,7 +54,9 @@ export const useWishlistStore = create(
             removeItem: async (userId: string, itemId: string) => {
                 set({ error: null });
                 try {
-                    await httpClient.delete(`/wishlist/${itemId}?userId=${userId}`);
+                    const query = queryString.stringify({ userId });
+                    const url = `/wishlist/${itemId}?${query}`;
+                    await httpClient.delete(url);
                     set((state) => ({
                         wishlist: state.wishlist.filter((item) => item.id !== itemId),
                     }));
