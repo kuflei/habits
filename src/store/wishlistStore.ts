@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 import queryString from 'query-string';
 import { createHttpClient } from "@/features/api/httpClient";
 
+const httpClient = createHttpClient('/api');
+
 interface WishlistItem {
     id: string;
     name: string;
@@ -16,8 +18,6 @@ interface WishlistStore {
     error: string | null;
     loading: boolean;
 }
-
-const httpClient = createHttpClient('/api');
 
 export const useWishlistStore = create(
     persist<WishlistStore>(
