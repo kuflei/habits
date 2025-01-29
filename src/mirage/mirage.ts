@@ -13,7 +13,10 @@ export function makeServer({ environment = 'development' } = {}) {
                         email: 'john@example.com',
                         password: '123',
                         habits: [
-                            { id: '101', name: "Piter Exercise", startDate: "2025-01-01", endDate: "2025-01-12", frequency: 1, reward: "New Shoes", progress: {} },
+                            { id: '101', name: "Piter Exercise", startDate: "2025-01-01", endDate: "2025-01-12", frequency: 1, reward: "New Shoes", "progress": {
+                                    "2025-01-01": true,
+                                    "2025-01-02": false
+                                } },
                             { id: '102', name: "Piter Exercise2", startDate: "2025-01-01", endDate: "2025-01-10", frequency: 3, reward: "New Shoes", progress: {} },
                         ],
                         wishlist: [
@@ -118,24 +121,23 @@ export function makeServer({ environment = 'development' } = {}) {
                 const id = request.params.id;
                 const { habit, userId } = JSON.parse(request.requestBody);
 
-                console.log('Updating progress for habit ID:', id);
-                console.log('User ID:', userId);
+                console.log("Отримано PATCH запит:", { id, userId, habit });
 
                 const user = schema.db.users.find(userId);
-
                 if (!user) {
                     return new Response(404, {}, { error: 'User not found' });
                 }
 
                 const habitIndex = user.habits.findIndex((h) => h.id === id);
-
                 if (habitIndex === -1) {
                     return new Response(404, {}, { error: 'Habit not found' });
                 }
 
                 // Оновлюємо прогрес звички
-                user.habits[habitIndex] = { ...user.habits[habitIndex], ...habit };
+                user.habits[habitIndex].progress = habit.progress || {};
                 schema.db.users.update(userId, { habits: user.habits });
+
+                console.log("Оновлений прогрес:", user.habits[habitIndex].progress);
 
                 return user.habits[habitIndex];
             });

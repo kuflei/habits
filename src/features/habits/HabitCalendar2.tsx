@@ -6,7 +6,12 @@ import {useTranslation} from "react-i18next";
 import { Habit } from '@/types/Habit';
 import { useHabitStore } from '@/store/useHabitStore';
 import { generateDateRange, getDayOfMonth, today } from '@/utils/date';
+import {DateCalendar, LocalizationProvider, PickersDay, PickersDayProps} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, {Dayjs} from "dayjs";
 import { useAuthStore} from "@/store/authStore";
+
+
 interface HabitCalendarProps { // Describes the structure of an object
     habit: Habit;
 }
@@ -14,6 +19,7 @@ interface HabitCalendarProps { // Describes the structure of an object
 const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
     const [message, setMessage] = useState(false);
     const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
+    const progress = useHabitStore((state) => state.habits[props.habit.progress]);
     const { t } = useTranslation();
     const dateRangeOptions = {
         start: props.habit.startDate,
@@ -21,7 +27,6 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
         frequency: props.habit.frequency
     };
     const userId = useAuthStore((state) => state.userId);
-
     const dateRange = generateDateRange(dateRangeOptions);
     const cssPaper = {
         padding: 1,
@@ -39,14 +44,50 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
             setTimeout(() => setMessage(false), 2000);
             return;
         }
-         toggleHabitProgress(userId, props.habit.id, date);
+        toggleHabitProgress(userId, props.habit.id, date);
     };
 
     return (
         <Grid container spacing={1} sx={{ mt: 2 }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                    onChange={handleDateClick}
+                    slots={{
+                        day: (props: PickersDayProps<Dayjs>) => {
+                            const formattedDay = props.day.format("YYYY-MM-DD");
+
+                            const isInRange = dateRange.includes(formattedDay);
+
+                            const isCompleted = progress?.[formattedDay] ?? false;
+                            console.log(isCompleted)
+
+                            // Чи день був пропущений (минулий і не виконаний)
+                            const isMissed = isInRange && !isCompleted && dayjs(formattedDay).isBefore(dayjs(), "day");
+                            /*const isMissed = isCompleted < today && !progress?.[formattedDay];*/
+
+                            return (
+                                <PickersDay
+                                    {...props}
+                                    sx={{
+                                        backgroundColor: isCompleted
+                                            ? "#4CAF50" // Виконаний (зелений)
+                                            : isMissed
+                                                ? "#FF6B6B" // Пропущений (червоний)
+                                                : isInRange
+                                                    ? "#FFF5E1" // Входить у проміжок (бежевий)
+                                                    : "transparent", // Не відноситься до трекінгу
+                                        color: isCompleted || isMissed ? "white" : "black",
+                                        "&:hover": { backgroundColor: "#81c784" },
+                                    }}
+                                />
+                            );
+                        },
+                    }}
+                />
+            </LocalizationProvider>
             {dateRange.map((date) => {
                 return (
-                    <Grid size={{ xs: 2, md: 1 }} key={`habit-${props.habit.id}-${date}`}>
+                    <Grid size={{ xs: 2, md: 1 }} key={date}>
                         <Paper
                             onClick={() => handleDateClick(date)}
                             sx={cssPaper}
