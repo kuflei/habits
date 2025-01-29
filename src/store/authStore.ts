@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { useStorage } from '@/features/hooks/useStorage';
+import {create} from 'zustand';
+import {persist} from "zustand/middleware";
 
 interface AuthState {
     userId: string | null;
@@ -8,37 +8,18 @@ interface AuthState {
     clearAuth: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-    userId: null,
-    token: null,
+export const useAuthStore = create(
+    persist<AuthState>((set) => ({
+        userId: null,
+        token: null,
 
-    setUserId: (id: string) => {
-        set({ userId: id });
-    },
+        setUserId: (id: string) => {
+            set({userId: id});
+        },
 
-    clearAuth: () => {
-        set({ userId: null, token: null });
-    },
-}));
-
-export const useAuthWithStorage = () => {
-    const storage = useStorage('local');
-    const { userId, setUserId, clearAuth } = useAuthStore();
-
-    const setUserIdWithStorage = (id: string) => {
-        storage.setItem('userId', id);
-        setUserId(id);
-    };
-
-    const clearAuthWithStorage = () => {
-        storage.removeItem('userId');
-        clearAuth();
-    };
-
-    return {
-        userId: storage.getItem<string>('userId') || userId,
-        setUserId: setUserIdWithStorage,
-        clearAuth: clearAuthWithStorage,
-    };
-};
+        clearAuth: () => {
+            set({userId: null, token: null});
+        },
+    }), {name: 'auth-store'})
+);
 
