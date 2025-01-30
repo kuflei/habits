@@ -6,6 +6,7 @@ import { useHabitStore } from '@/store/useHabitStore';
 import HabitCalendar from '@/features/habits/HabitCalendar';
 import HabitForm from '@/features/habits/HabitForm';
 import {generateDateRange} from "@/utils/date";
+import { useAuthStore} from "@/store/authStore";
 
 interface HabitItemProps {
     habit: Habit;
@@ -15,6 +16,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
     const [isEditing, setIsEditing] = useState(false);
     const deleteHabit = useHabitStore((state) => state.deleteHabit);
     const { progress, startDate, endDate, reward } = props.habit;
+    const userId = useAuthStore((state) => state.userId);
     const { t } = useTranslation();
     const dateRangeOptions = {
         start: startDate,
@@ -60,7 +62,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
                                 {t("edit")}
                             </Button>
                         )}
-                        <Button variant="contained" color="secondary" onClick={() => deleteHabit(props.habit.id)}>
+                        <Button variant="contained" color="secondary" onClick={() => deleteHabit(props.habit.id, userId)}>
                             {t("delete")}
                         </Button>
                     </Box>

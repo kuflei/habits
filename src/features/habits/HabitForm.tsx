@@ -33,14 +33,14 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
         validate,
         onSubmit: async (values) => {
             if (props.habit) {
-                updateHabit({ ...props.habit, ...values }, userId);
+                updateHabit(userId, { ...props.habit, ...values });
             } else {
                 const newHabit = {
                     id: Date.now().toString(),
                     ...values,
                     progress: {},
                 };
-                addHabit(newHabit, userId);
+                addHabit(userId, newHabit);
             }
             if (props.onSubmit) {
                 props.onSubmit();

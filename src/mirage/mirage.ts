@@ -133,11 +133,9 @@ export function makeServer({ environment = 'development' } = {}) {
                     return new Response(404, {}, { error: 'Habit not found' });
                 }
 
-                // Оновлюємо прогрес звички
-                user.habits[habitIndex].progress = habit.progress || {};
-                schema.db.users.update(userId, { habits: user.habits });
+                user.habits[habitIndex] = { ...user.habits[habitIndex], ...habit };
 
-                console.log("Оновлений прогрес:", user.habits[habitIndex].progress);
+                schema.db.users.update(userId, { habits: user.habits });
 
                 return user.habits[habitIndex];
             });
