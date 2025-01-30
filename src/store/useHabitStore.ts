@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import queryString from 'query-string';
 import { Habit } from '@/types/Habit';
 import {createHttpClient} from "@/features/api/httpClient";
@@ -21,15 +21,24 @@ export const useHabitStore = create(
     persist<HabitStore>(
         (set, get) => ({
             habits: [],
+            userId: null,
 
             fetchHabits: async (userId: string) => {
                 try {
                     const query = queryString.stringify({ userId });
                     const url = `/habits?${query}`;
                     const habits = await httpClient.get<Habit[]>(url);
-                    set({ habits });
+
+                    console.log("Fetched habits from API:", habits);
+                    set((state) => {
+                        const updatedState = { ...state, habits, userId };
+
+                        localStorage.setItem(`habits-${userId}`, JSON.stringify(habits));
+
+                        return updatedState;
+                    });
                 } catch (error) {
-                    console.error('Error fetching habits:', error);
+                    console.error("Error fetching habits:", error);
                 }
             },
 
@@ -37,13 +46,19 @@ export const useHabitStore = create(
                 try {
                     const url = `/habits`;
                     const newHabit = await httpClient.post<Habit>(url, { userId, habit });
-                    set((state) => ({
-                        habits: [...state.habits, newHabit],
-                    }));
+
+                    set((state) => {
+                        const updatedHabits = [...state.habits, newHabit];
+
+                        localStorage.setItem(`habits-${userId}`, JSON.stringify(updatedHabits));
+
+                        return { habits: updatedHabits };
+                    });
                 } catch (error) {
-                    console.error('Error adding habit:', error);
+                    console.error("Error adding habit:", error);
                 }
             },
+
 
             updateHabit: async (userId: string, updatedHabit: Habit) => {
                 try {
@@ -52,26 +67,37 @@ export const useHabitStore = create(
                         userId,
                         habit: updatedHabit,
                     });
-                    set((state) => ({
-                        habits: state.habits.map((habit) =>
+
+                    set((state) => {
+                        const updatedHabits = state.habits.map((habit) =>
                             habit.id === updated.id ? updated : habit
-                        ),
-                    }));
+                        );
+
+                        localStorage.setItem(`habits-${userId}`, JSON.stringify(updatedHabits));
+
+                        return { habits: updatedHabits };
+                    });
                 } catch (error) {
-                    console.error('Error updating habit:', error);
+                    console.error("Error updating habit:", error);
                 }
             },
+
 
             deleteHabit: async (habitId: string, userId: string) => {
                 try {
                     const query = queryString.stringify({ userId });
                     const url = `/habits/${habitId}?${query}`;
                     await httpClient.delete(url);
-                    set((state) => ({
-                        habits: state.habits.filter((habit) => habit.id !== habitId),
-                    }));
+
+                    set((state) => {
+                        const updatedHabits = state.habits.filter((habit) => habit.id !== habitId);
+
+                        localStorage.setItem(`habits-${userId}`, JSON.stringify(updatedHabits));
+
+                        return { habits: updatedHabits };
+                    });
                 } catch (error) {
-                    console.error('Error deleting habit:', error);
+                    console.error("Error deleting habit:", error);
                 }
             },
 
@@ -110,6 +136,12 @@ export const useHabitStore = create(
             },
 
         }),
-        { name: "habit-storage" }
+        {
+            name: "habit-storage",
+            storage: createJSONStorage(() => window.localStorage),
+            onRehydrateStorage: (state) => {
+                console.log("Rehydrated state from localStorage:", state);
+            },
+        }
     )
 );
