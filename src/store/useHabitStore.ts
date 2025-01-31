@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import queryString from 'query-string';
 import { Habit } from '@/types/Habit';
 import {createHttpClient} from "@/features/api/httpClient";
@@ -7,6 +7,7 @@ const httpClient = createHttpClient('/api');
 
 interface HabitStore {
     habits: Habit[];
+    userId: string | null;
     fetchHabits: (userId: string) => Promise<void>;
     addHabit: (userId: string, habit: Habit) => Promise<void>;
     updateHabit: (userId: string, updatedHabit: Habit) => Promise<void>;
@@ -59,7 +60,6 @@ export const useHabitStore = create(
                 }
             },
 
-
             updateHabit: async (userId: string, updatedHabit: Habit) => {
                 try {
                     const url = `/habits/${updatedHabit.id}`;
@@ -102,23 +102,16 @@ export const useHabitStore = create(
             },
 
             toggleHabitProgress: async (userId: string, habitId: string, date: string) => {
-                set((state) => {
-                    const habitIndex = state.habits.findIndex((habit) => habit.id === habitId);
-
-                    if (habitIndex === -1) {
-                        console.error("Habit not found for ID:", habitId);
-                        return state;
-                    }
-
-                    const updatedHabits = [...state.habits];
-                    const habit = updatedHabits[habitIndex];
-
-                    habit.progress = habit.progress || {};
-
-                    habit.progress[date] = !habit.progress[date];
-
-                    return { habits: updatedHabits };
-                });
+                set((state) => ({
+                    habits: state.habits.map((habit) =>
+                        habit.id === habitId
+                            ? {
+                                ...habit,
+                                progress: { ...habit.progress, [date]: !habit.progress?.[date] }
+                            }
+                            : habit
+                    )
+                }));
 
                 try {
                     const updatedHabit = get().habits.find((h) => h.id === habitId);
@@ -129,7 +122,6 @@ export const useHabitStore = create(
                         userId,
                         habit: { progress: updatedHabit.progress },
                     });
-
                 } catch (error) {
                     console.error("Error updating progress:", error);
                 }
@@ -138,10 +130,6 @@ export const useHabitStore = create(
         }),
         {
             name: "habit-storage",
-            storage: createJSONStorage(() => window.localStorage),
-            onRehydrateStorage: (state) => {
-                console.log("Rehydrated state from localStorage:", state);
-            },
         }
     )
 );

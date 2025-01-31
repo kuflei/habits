@@ -18,6 +18,8 @@ export function makeServer({ environment = 'development' } = {}) {
                                     "2025-01-02": false
                                 } },
                             { id: '102', name: "Piter Exercise2", startDate: "2025-01-01", endDate: "2025-01-10", frequency: 3, reward: "New Shoes", progress: {} },
+                            {id: "1738316833536", name: "Test Habit", startDate: "2025-01-31", endDate: "2025-01-31", frequency: 1, progress: {}, reward: "Piter New Book"},
+                            {id: "1738317216858", name: "Another Habit", startDate: "2025-01-31", endDate: "2025-01-31", frequency: 2, progress: {}, reward: "Coffee"}
                         ],
                         wishlist: [
                             { id: '111', name: 'Piter New Book' },

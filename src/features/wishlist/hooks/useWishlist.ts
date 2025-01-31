@@ -5,12 +5,22 @@ import { useAuthStore } from '@/store/authStore';
 export const useWishlist = () => {
     const userId = useAuthStore((state) => state.userId);
     const { wishlist, fetchWishlist, addItem, removeItem, loading, error } = useWishlistStore();
+    const setWishlist = useWishlistStore.setState;
 
     useEffect(() => {
-        if (userId) {
+        if (!userId) {
+            console.error("No userId provided");
+            return;
+        }
+
+        const storedsetWishlist = JSON.parse(localStorage.getItem(`wishlist-${userId}`) || "[]");
+
+        if (storedsetWishlist.length > 0) {
+            setWishlist({ habits: storedsetWishlist });
+        } else {
             fetchWishlist(userId);
         }
-    }, [fetchWishlist, userId]);
+    }, [userId, fetchWishlist]);
 
     return {
         wishlist,
