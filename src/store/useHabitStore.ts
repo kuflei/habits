@@ -1,10 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import queryString from 'query-string';
 import { Habit } from '@/types/Habit';
-import {createHttpClient} from "@/features/api/httpClient";
-import {storageFactory} from '@/utils/storageFactory'
-const httpClient = createHttpClient('/api');
+import * as api from '@/features/habits/api/apiHabits';
+import { saveHabits } from '@/features/habits/storage/storageHabits';
 
 interface HabitStore {
     habits: Habit[];
@@ -15,10 +13,6 @@ interface HabitStore {
     deleteHabit: (userId: string, id: string) => Promise<void>;
     toggleHabitProgress: (userId: string, id: string, date: string) => Promise<void>;
 }
-// set function to update state
-// state current state
-// we get current state and return new obj
-const localStorageAPI = storageFactory(localStorage);
 
 export const useHabitStore = create(
     persist<HabitStore>(
@@ -28,16 +22,10 @@ export const useHabitStore = create(
 
             fetchHabits: async (userId: string) => {
                 try {
-                    const query = queryString.stringify({ userId });
-                    const url = `/habits?${query}`;
-                    const habits = await httpClient.get<Habit[]>(url);
-
-                    console.log("Fetched habits from API:", habits);
+                    const habits = await api.fetchHabits(userId);
                     set((state) => {
                         const updatedState = { ...state, habits, userId };
-
-                        localStorageAPI.setItem(`habits-${userId}`, habits);
-
+                        saveHabits(userId, habits);
                         return updatedState;
                     });
                 } catch (error) {
@@ -47,14 +35,10 @@ export const useHabitStore = create(
 
             addHabit: async (userId: string, habit: Habit) => {
                 try {
-                    const url = `/habits`;
-                    const newHabit = await httpClient.post<Habit>(url, { userId, habit });
-
+                    const newHabit = await api.addHabit(userId, habit);
                     set((state) => {
                         const updatedHabits = [...state.habits, newHabit];
-
-                        localStorageAPI.setItem(`habits-${userId}`, updatedHabits);
-
+                        saveHabits(userId, updatedHabits);
                         return { habits: updatedHabits };
                     });
                 } catch (error) {
@@ -64,19 +48,12 @@ export const useHabitStore = create(
 
             updateHabit: async (userId: string, updatedHabit: Habit) => {
                 try {
-                    const url = `/habits/${updatedHabit.id}`;
-                    const updated = await httpClient.patch<Habit>(url, {
-                        userId,
-                        habit: updatedHabit,
-                    });
-
+                    const updated = await api.updateHabit(userId, updatedHabit);
                     set((state) => {
                         const updatedHabits = state.habits.map((habit) =>
                             habit.id === updated.id ? updated : habit
                         );
-
-                        localStorageAPI.setItem(`habits-${userId}`, updatedHabits);
-
+                        saveHabits(userId, updatedHabits);
                         return { habits: updatedHabits };
                     });
                 } catch (error) {
@@ -84,18 +61,12 @@ export const useHabitStore = create(
                 }
             },
 
-
             deleteHabit: async (habitId: string, userId: string) => {
                 try {
-                    const query = queryString.stringify({ userId });
-                    const url = `/habits/${habitId}?${query}`;
-                    await httpClient.delete(url);
-
+                    await api.deleteHabit(habitId, userId);
                     set((state) => {
                         const updatedHabits = state.habits.filter((habit) => habit.id !== habitId);
-
-                        localStorageAPI.setItem(`habits-${userId}`, updatedHabits);
-
+                        saveHabits(userId, updatedHabits);
                         return { habits: updatedHabits };
                     });
                 } catch (error) {
@@ -118,12 +89,7 @@ export const useHabitStore = create(
                 try {
                     const updatedHabit = get().habits.find((h) => h.id === habitId);
                     if (!updatedHabit) return;
-
-                    const url = `/habits/${habitId}`;
-                    await httpClient.patch(url, {
-                        userId,
-                        habit: { progress: updatedHabit.progress },
-                    });
+                    await api.toggleHabitProgress(userId, habitId, updatedHabit.progress);
                 } catch (error) {
                     console.error("Error updating progress:", error);
                 }
