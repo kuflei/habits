@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import queryString from "query-string";
 import { createHttpClient } from "@/features/api/httpClient";
+import {storageFactory} from '@/utils/storageFactory'
 
 const httpClient = createHttpClient("/api");
 
@@ -19,10 +20,11 @@ interface WishlistStore {
     error: string | null;
     loading: boolean;
 }
+const localStorageAPI = storageFactory(localStorage);
 
 export const useWishlistStore = create(
     persist<WishlistStore>(
-        (set, get) => ({
+        (set) => ({
             wishlist: [],
             userId: null,
             error: null,
@@ -34,22 +36,10 @@ export const useWishlistStore = create(
                 try {
                     const query = queryString.stringify({ userId });
                     const url = `/wishlist?${query}`;
-                    const serverWishlist = await httpClient.get<WishlistItem[]>(url);
+                    const wishlist = await httpClient.get<WishlistItem[]>(url);
 
-                    // 🛠 Отримуємо wishlist з `localStorage`
-                    const localWishlist = JSON.parse(localStorage.getItem(`wishlist-${userId}`) || "[]");
-
-                    // 🛠 Об'єднуємо `serverWishlist` + `localWishlist` без дублікатів
-                    const mergedWishlist = [
-                        ...serverWishlist,
-                        ...localWishlist.filter((localItem: WishlistItem) =>
-                            !serverWishlist.some((serverItem) => serverItem.id === localItem.id)
-                        ),
-                    ];
-
-                    // 🛠 Зберігаємо оновлений список у Zustand і `localStorage`
-                    set({ wishlist: mergedWishlist, userId, loading: false });
-                    localStorage.setItem(`wishlist-${userId}`, JSON.stringify(mergedWishlist));
+                    set({ wishlist: wishlist, userId, loading: false });
+                    localStorageAPI.setItem(`wishlist-${userId}`, wishlist);
 
                 } catch (error) {
                     set({ error: (error as Error).message, loading: false });
@@ -66,8 +56,7 @@ export const useWishlistStore = create(
                     set((state) => {
                         const updatedWishlist = [...state.wishlist, newItem];
 
-                        // 🛠 Оновлюємо `localStorage`
-                        localStorage.setItem(`wishlist-${userId}`, JSON.stringify(updatedWishlist));
+                        localStorageAPI.setItem(`wishlist-${userId}`, updatedWishlist);
 
                         return { wishlist: updatedWishlist };
                     });
@@ -88,7 +77,7 @@ export const useWishlistStore = create(
                     set((state) => {
                         const updatedWishlist = state.wishlist.filter((item) => item.id !== itemId);
 
-                        localStorage.setItem(`wishlist-${userId}`, JSON.stringify(updatedWishlist));
+                        localStorageAPI.setItem(`wishlist-${userId}`, updatedWishlist);
 
                         return { wishlist: updatedWishlist };
                     });

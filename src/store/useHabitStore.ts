@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import queryString from 'query-string';
 import { Habit } from '@/types/Habit';
 import {createHttpClient} from "@/features/api/httpClient";
+import {storageFactory} from '@/utils/storageFactory'
 const httpClient = createHttpClient('/api');
 
 interface HabitStore {
@@ -17,6 +18,7 @@ interface HabitStore {
 // set function to update state
 // state current state
 // we get current state and return new obj
+const localStorageAPI = storageFactory(localStorage);
 
 export const useHabitStore = create(
     persist<HabitStore>(
@@ -34,7 +36,7 @@ export const useHabitStore = create(
                     set((state) => {
                         const updatedState = { ...state, habits, userId };
 
-                        localStorage.setItem(`habits-${userId}`, JSON.stringify(habits));
+                        localStorageAPI.setItem(`habits-${userId}`, habits);
 
                         return updatedState;
                     });
@@ -51,7 +53,7 @@ export const useHabitStore = create(
                     set((state) => {
                         const updatedHabits = [...state.habits, newHabit];
 
-                        localStorage.setItem(`habits-${userId}`, JSON.stringify(updatedHabits));
+                        localStorageAPI.setItem(`habits-${userId}`, updatedHabits);
 
                         return { habits: updatedHabits };
                     });
@@ -73,7 +75,7 @@ export const useHabitStore = create(
                             habit.id === updated.id ? updated : habit
                         );
 
-                        localStorage.setItem(`habits-${userId}`, JSON.stringify(updatedHabits));
+                        localStorageAPI.setItem(`habits-${userId}`, updatedHabits);
 
                         return { habits: updatedHabits };
                     });
@@ -92,7 +94,7 @@ export const useHabitStore = create(
                     set((state) => {
                         const updatedHabits = state.habits.filter((habit) => habit.id !== habitId);
 
-                        localStorage.setItem(`habits-${userId}`, JSON.stringify(updatedHabits));
+                        localStorageAPI.setItem(`habits-${userId}`, updatedHabits);
 
                         return { habits: updatedHabits };
                     });
