@@ -1,72 +1,61 @@
-import React, { useState } from 'react';
-import { Paper, Typography, Alert } from '@mui/material';
+import React, { useMemo, useCallback } from 'react';
 import Grid from '@mui/material/Grid2';
-import classNames from 'classnames';
-import {useTranslation} from "react-i18next";
+import {DateCalendar, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import { Habit } from '@/types/Habit';
 import { useHabitStore } from '@/store/useHabitStore';
-import { generateDateRange, getDayOfMonth, today } from '@/utils/date';
 import { useAuthStore} from "@/store/authStore";
-interface HabitCalendarProps { // Describes the structure of an object
+import { generateDateRange } from '@/utils/date';
+import  HabitCalendarDay  from "@/features/habits/HabitCalendarDay.tsx";
+
+interface HabitCalendarProps {
     habit: Habit;
 }
 
 const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
-    const [message, setMessage] = useState(false);
     const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
-    const { t } = useTranslation();
-    const dateRangeOptions = {
-        start: props.habit.startDate,
-        end: props.habit.endDate,
-        frequency: props.habit.frequency
-    };
+    const habit = useHabitStore((state) => state.habits.find((h) => h.id === props.habit.id));
+    const progress = habit ? habit.progress : {};
     const userId = useAuthStore((state) => state.userId);
 
-    const dateRange = generateDateRange(dateRangeOptions);
-    const cssPaper = {
-        padding: 1,
-        textAlign: 'center',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        '&:hover': {
-            boxShadow: 3,
-        }
-    }
-    const handleDateClick = (date: string) => {
-        if (date > today) {
-            // Not allow to click on the future date
-            setMessage(true);
-            setTimeout(() => setMessage(false), 2000);
-            return;
-        }
-         toggleHabitProgress(userId, props.habit.id, date);
-    };
+    const dateRangeOptions = useMemo(
+        () => ({
+            start: props.habit.startDate,
+            end: props.habit.endDate,
+            frequency: props.habit.frequency,
+        }),
+        [props.habit.startDate, props.habit.endDate, props.habit.frequency]
+    );
+    const dateRange = useMemo(
+        () => generateDateRange(dateRangeOptions),
+        [dateRangeOptions]
+    );
+
+    const handleDateClick = useCallback(
+        (date: string) => {
+            if (!dateRange.includes(date)) return;
+
+            toggleHabitProgress(userId, props.habit.id, date);
+        },
+        [dateRange, toggleHabitProgress, userId, props.habit.id]
+    );
 
     return (
         <Grid container spacing={1} sx={{ mt: 2 }}>
-            {dateRange.map((date) => {
-                return (
-                    <Grid size={{ xs: 2, md: 1 }} key={`habit-${props.habit.id}-${date}`}>
-                        <Paper
-                            onClick={() => handleDateClick(date)}
-                            sx={cssPaper}
-                            className={classNames('calendar-day', {
-                                completed: props.habit.progress[date],
-                                missed: date < today && !props.habit.progress[date],
-                            })}>
-                            <Typography variant="body2">{getDayOfMonth(date)}</Typography>
-                        </Paper>
-                    </Grid>
-                );
-            })}
-
-            {message && (
-                <Grid size={{ xs: 12 }}>
-                    <Alert severity="warning" sx={{ mt: 2, textAlign: 'center' }}>
-                        🚫 {t("noFutureDates")}
-                    </Alert>
-                </Grid>
-            )}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                    onChange={(date) => handleDateClick(date?.format("YYYY-MM-DD") || "")}
+                    slots={{
+                        day: (dayProps) => (
+                            <HabitCalendarDay
+                                {...dayProps}
+                                progress={progress}
+                                dateRange={dateRange}
+                            />
+                        ),
+                    }}
+                />
+            </LocalizationProvider>
         </Grid>
     );
 };
