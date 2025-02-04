@@ -38,7 +38,7 @@ export const deleteHabit = async (
 export const toggleHabitProgress = async (
   userId: string,
   habitId: string,
-  progress: any,
+  progress: Record<string, boolean>,
 ): Promise<void> => {
   const url = `/habits/${habitId}`;
   await httpClient.patch(url, { userId, habit: { progress } });

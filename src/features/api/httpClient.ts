@@ -1,43 +1,43 @@
 export const createHttpClient = (baseUrl: string) => {
-  const request = async <T>(
+  const request = async <T, P = Record<string, unknown>>(
     url: string,
     method: "GET" | "POST" | "PATCH" | "DELETE",
-    payload?: any,
+    payload?: P,
     headers: Record<string, string> = { "Content-Type": "application/json" },
   ): Promise<T> => {
-    const options: RequestInit = {
-      method,
-      headers,
-      ...(payload && { body: JSON.stringify(payload) }),
-    };
+    try {
+      const options: RequestInit = {
+        method,
+        headers: {
+          ...headers,
+          "Content-Type": headers["Content-Type"] ?? "application/json",
+        },
+        ...(payload && { body: JSON.stringify(payload) }),
+      };
 
-    const response = await fetch(`${baseUrl}${url}`, options);
+      const response = await fetch(`${baseUrl}${url}`, options);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Error ${method} ${url}: ${response.status} - ${errorText}`,
-      );
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Error ${method} ${url}: ${response.status} - ${errorText}`,
+        );
+      }
+
+      return response.json();
+    } catch (error) {
+      throw new Error(`HTTP request failed: ${error}`);
     }
-
-    return response.json();
   };
 
-  const get = async <T>(url: string): Promise<T> => {
-    return request<T>(url, "GET");
-  };
+  const httpMethod =
+    <T, P = Record<string, unknown>>(method: "GET" | "POST" | "PATCH" | "DELETE") =>
+    async (url: string, payload?: P): Promise<T> => request<T, P>(url, method, payload);
 
-  const post = async <T>(url: string, payload: any): Promise<T> => {
-    return request<T>(url, "POST", payload);
+  return {
+    get: httpMethod("GET"),
+    post: httpMethod("POST"),
+    patch: httpMethod("PATCH"),
+    delete: httpMethod("DELETE"),
   };
-
-  const patch = async <T>(url: string, payload: any): Promise<T> => {
-    return request<T>(url, "PATCH", payload);
-  };
-
-  const del = async (url: string): Promise<void> => {
-    await request<void>(url, "DELETE");
-  };
-
-  return { get, post, patch, delete: del };
 };

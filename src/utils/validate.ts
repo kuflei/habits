@@ -1,6 +1,14 @@
 import { today } from "./date";
 
-export const validate = (values: any) => {
+interface HabitFormValues {
+  name: string;
+  startDate: string;
+  endDate: string;
+  frequency: number;
+  reward: string;
+}
+
+export const validate = (values: HabitFormValues) => {
   const errors: { [key: string]: string } = {};
 
   if (!values.name.trim()) {

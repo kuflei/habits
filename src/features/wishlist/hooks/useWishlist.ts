@@ -23,7 +23,7 @@ export const useWishlist = () => {
     } else {
       fetchWishlist(userId);
     }
-  }, [userId, fetchWishlist]);
+  }, [userId, fetchWishlist, setWishlist]);
 
   return {
     wishlist,

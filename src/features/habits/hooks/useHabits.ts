@@ -21,7 +21,7 @@ export const useHabits = (userId: string | null) => {
     } else {
       fetchHabits(userId);
     }
-  }, [userId, fetchHabits]);
+  }, [userId, fetchHabits, setHabits]);
 
   return habits;
 };

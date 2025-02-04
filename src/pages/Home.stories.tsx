@@ -9,8 +9,7 @@ import Home from "./Home.tsx";
 
 const theme = createTheme();
 
-// Декоратор для Storybook
-const withProviders = (Story: any) => {
+const withProviders = (Story: () => JSX.Element): JSX.Element => {
   useAuthStore.setState({ userId: "1" });
   useHabitStore.setState({
     habits: [
@@ -18,11 +17,6 @@ const withProviders = (Story: any) => {
       { id: "2", name: "Another Habit", reward: "Another Reward" },
     ],
   });
-
-  const wishlist = [
-    { id: "3", name: "New Book" },
-    { id: "4", name: "Movie Ticket" },
-  ];
 
   return (
     <ThemeProvider theme={theme}>

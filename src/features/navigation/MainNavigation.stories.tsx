@@ -1,13 +1,13 @@
-import MainNavigation from "./MainNavigation";
-import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n/i18n";
+import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
+import MainNavigation from "./MainNavigation";
 import { useAuthStore } from "@/store/authStore";
 
 const theme = createTheme();
 
-const withProviders = (Story: any) => {
+const withProviders = (Story: () => JSX.Element): JSX.Element => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
