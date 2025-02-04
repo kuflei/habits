@@ -21,6 +21,6 @@ export function storageFactory(storageType: StorageType): StorageAPI {
     },
     clear: (): void => {
       storageType.clear();
-    }
+    },
   };
 }

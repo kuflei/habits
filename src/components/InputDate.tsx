@@ -5,30 +5,30 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface InputDateProps {
-    label: string;
-    name: string;
-    value: string | null;
-    onChange: (name: string, value: string | null) => void;
-    min?: string;
+  label: string;
+  name: string;
+  value: string | null;
+  onChange: (name: string, value: string | null) => void;
+  min?: string;
 }
 
 const InputDate: React.FC<InputDateProps> = (props) => {
-    const handleChange = (newValue: dayjs.Dayjs | null) => {
-        props.onChange(props.name, newValue ? newValue.format('YYYY-MM-DD') : null);
-    };
-    const formattedValue = props.value ? dayjs(props.value) : null;
-    const minDate = props.min ? dayjs(props.min) : undefined;
+  const handleChange = (newValue: dayjs.Dayjs | null) => {
+    props.onChange(props.name, newValue ? newValue.format("YYYY-MM-DD") : null);
+  };
+  const formattedValue = props.value ? dayjs(props.value) : null;
+  const minDate = props.min ? dayjs(props.min) : undefined;
 
-    return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-                label={props.label}
-                value={formattedValue}
-                onChange={handleChange}
-                minDate={minDate}
-            />
-        </LocalizationProvider>
-    );
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label={props.label}
+        value={formattedValue}
+        onChange={handleChange}
+        minDate={minDate}
+      />
+    </LocalizationProvider>
+  );
 };
 
 export default InputDate;

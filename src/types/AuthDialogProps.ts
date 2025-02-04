@@ -1,4 +1,4 @@
 export interface AuthDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }

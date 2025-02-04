@@ -1,34 +1,44 @@
-import React, {useState} from "react";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import {useTranslation} from "react-i18next";
-import {useAuth} from "../hooks/useAuth.ts";
-import {AuthDialogProps} from "@/types/AuthDialogProps.ts";
+import React, { useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "../hooks/useAuth.ts";
+import { AuthDialogProps } from "@/types/AuthDialogProps.ts";
 
 const LogoutDialog: React.FC<AuthDialogProps> = (props) => {
-    const {handleLogout} = useAuth();
-    const [error, setError] = useState<string | null>(null);
-    const {t} = useTranslation();
+  const { handleLogout } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
-    const handleSubmit = async () => {
-        try {
-            await handleLogout();
-            props.onClose();
-        } catch (err) {
-            setError((err as Error).message);
-        }
+  const handleSubmit = async () => {
+    try {
+      await handleLogout();
+      props.onClose();
+    } catch (err) {
+      setError((err as Error).message);
     }
-    return (
-        <Dialog open={props.isOpen} onClose={props.onClose}>
-            <DialogTitle>{t('logout')}</DialogTitle>
-                <DialogContent>
-                     <p>{t('confirmLogout')}</p>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                </DialogContent>
-                <DialogActions>
-                    <Button color="secondary" onClick={props.onClose}>{t('cancel')}</Button>
-                    <Button color="primary" onClick={handleSubmit}>{t('logout')}</Button>
-                </DialogActions>
-        </Dialog>
-    )
-}
+  };
+  return (
+    <Dialog open={props.isOpen} onClose={props.onClose}>
+      <DialogTitle>{t("logout")}</DialogTitle>
+      <DialogContent>
+        <p>{t("confirmLogout")}</p>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </DialogContent>
+      <DialogActions>
+        <Button color="secondary" onClick={props.onClose}>
+          {t("cancel")}
+        </Button>
+        <Button color="primary" onClick={handleSubmit}>
+          {t("logout")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 export default LogoutDialog;
