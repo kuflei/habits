@@ -8,8 +8,8 @@ describe('InputDate', () => {
     const defaultProps: InputDateProps = {
         label: 'Test Label',
         name: 'testName',
-        value: '2023-10-10',
-        min: '2023-01-01',
+        value: '2023/10/10',
+        min: '2023/01/01',
         onChange: jest.fn()
     }
     const renderComponent = (props: InputDateProps) => {

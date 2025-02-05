@@ -4,7 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
+export const DEFAULT_DATE_FORMAT = 'MM/DD/YYYY';
 
 export interface InputDateProps {
     label: string;
