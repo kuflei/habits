@@ -31,8 +31,11 @@ export const createHttpClient = (baseUrl: string) => {
   };
 
   const httpMethod =
-    <T, P = Record<string, unknown>>(method: "GET" | "POST" | "PATCH" | "DELETE") =>
-    async (url: string, payload?: P): Promise<T> => request<T, P>(url, method, payload);
+    <T, P = Record<string, unknown>>(
+      method: "GET" | "POST" | "PATCH" | "DELETE",
+    ) =>
+    async (url: string, payload?: P): Promise<T> =>
+      request<T, P>(url, method, payload);
 
   return {
     get: httpMethod("GET"),
