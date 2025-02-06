@@ -6,7 +6,7 @@ import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
 import { useAuthStore } from "@/store/authStore";
 import { generateDateRange } from "@/utils/date";
-import HabitCalendarDay from "@/features/habits/HabitCalendarDay.tsx";
+import HabitCalendarDay from "@/features/habits/HabitCalendarDay";
 
 interface HabitCalendarProps {
   habit: Habit;

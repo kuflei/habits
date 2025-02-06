@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/store/authStore";
-import LogoutDialog from "./LogoutDialog.tsx";
-import LoginDialog from "./LoginDialog.tsx";
+import LogoutDialog from "./LogoutDialog";
+import LoginDialog from "./LoginDialog";
 
 const AuthButton: React.FC = () => {
   const { t } = useTranslation();

@@ -9,8 +9,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../hooks/useAuth.ts";
-import { AuthDialogProps } from "@/types/AuthDialogProps.ts";
+import { useAuth } from "../hooks/useAuth";
+import { AuthDialogProps } from "@/types/AuthDialogProps";
 import { validate } from "@/utils/validateLoginForm";
 
 const LoginDialog: React.FC<AuthDialogProps> = (props) => {

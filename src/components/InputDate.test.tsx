@@ -24,11 +24,10 @@ describe("InputDate", () => {
     );
   };
   beforeEach(() => {
-    /*TODO: expect...*/
     jest.clearAllMocks();
-    jest.resetAllMocks();
   });
   it("Should render", async () => {
+    expect.hasAssertions();
     renderComponent(defaultProps);
     const datePickerInput = screen.getByRole("textbox", {
       name: defaultProps.label,
@@ -37,6 +36,7 @@ describe("InputDate", () => {
     expect(datePickerInput).toHaveValue(
       dayjs(defaultProps.value).format(DEFAULT_DATE_FORMAT),
     );
+    expect(true).toBe(true);
   });
   it("Should call onChange with the correctly formatted date", async () => {
     const mockDate = "01/02/2023";

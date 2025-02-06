@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Meta } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
 import InputDate from "./InputDate";
 
 export default {
@@ -10,10 +11,9 @@ export default {
 
 export const Default = () => {
   const [value, setValue] = useState<string | null>(null);
-
   const handleChange = (name: string, newValue: string | null) => {
     setValue(newValue);
-    console.log(`Changed ${name}: ${newValue}`);
+    action(`Changed ${name}`)(newValue);
   };
 
   return (
@@ -28,10 +28,9 @@ export const Default = () => {
 
 export const WithInitialValue = () => {
   const [value, setValue] = useState<string | null>("2025-01-12");
-
   const handleChange = (name: string, newValue: string | null) => {
     setValue(newValue);
-    console.log(`Changed ${name}: ${newValue}`);
+    action(`Changed ${name}`)(newValue);
   };
 
   return (
@@ -46,10 +45,9 @@ export const WithInitialValue = () => {
 
 export const MinDate = () => {
   const [value, setValue] = useState<string | null>(null);
-
   const handleChange = (name: string, newValue: string | null) => {
     setValue(newValue);
-    console.log(`Changed ${name}: ${newValue}`);
+    action(`Changed ${name}`)(newValue);
   };
 
   return (

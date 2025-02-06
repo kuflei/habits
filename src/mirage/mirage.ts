@@ -150,23 +150,18 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.get("/habits", (schema, request) => {
         const userId = request.queryParams.userId;
-        console.log("Requested userId:", userId); // Логування userId
 
         const user = schema.db.users.find(userId);
 
         if (!user) {
-          console.log("User not found for id:", userId);
           return new Response(404, {}, { error: "User not found" });
         }
 
-        console.log("User habits:", user.habits); // Логування звичок користувача
         return user.habits;
       });
       this.patch("/habits/:id", (schema, request) => {
         const id = request.params.id;
         const { habit, userId } = JSON.parse(request.requestBody);
-
-        console.log("Отримано PATCH запит:", { id, userId, habit });
 
         const user = schema.db.users.find(userId);
         if (!user) {

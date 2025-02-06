@@ -5,7 +5,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n/i18n";
 import { useAuthStore } from "@/store/authStore";
 import { useHabitStore } from "@/store/useHabitStore";
-import Home from "./Home.tsx";
+import Home from "./Home";
 
 const theme = createTheme();
 

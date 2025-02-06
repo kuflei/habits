@@ -4,6 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+type DateFormat = "MM/DD/YYYY";
 export const DEFAULT_DATE_FORMAT = "MM/DD/YYYY";
 
 export interface InputDateProps {
@@ -12,7 +13,7 @@ export interface InputDateProps {
   value: string | null;
   onChange: (name: string, value: string | null) => void;
   min?: string;
-  dateFormat?: string /*TODO: find type for 'YYYY-MM-DD'*/;
+  dateFormat?: DateFormat;
 }
 
 const InputDate: React.FC<InputDateProps> = (props) => {

@@ -9,7 +9,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-import { Habit } from "@/types/Habit.ts";
+import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
 import { today } from "@/utils/date";
 import { validate } from "@/utils/validate";
