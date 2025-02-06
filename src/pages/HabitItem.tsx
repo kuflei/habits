@@ -56,7 +56,6 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
       >
         <CardHeader
           title={props.habit.name}
-          /*TODO: Періодичність: кожні {{frequency}} днів*/
           subheader={`🎯` + t("frequency") + ` ${props.habit.frequency}`}
         />
         <CardContent>

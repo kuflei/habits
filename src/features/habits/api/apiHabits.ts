@@ -1,39 +1,35 @@
 import { createHttpClient } from "@/features/api/httpClient";
 import { Habit } from "@/types/Habit";
-import queryString from "query-string"; /*TODO: move query-string to httpClient*/
 
 const httpClient = createHttpClient("/api");
 const baseUrl = "/habits";
 
 export const fetchHabits = async (userId: string): Promise<Habit[]> => {
-  const query = queryString.stringify({ userId });
-  const url = `${baseUrl}?${query}`;
-  return await httpClient.get<Habit[]>(url);
+  return httpClient.get<Habit[]>(`${baseUrl}`, { userId });
 };
 
 export const addHabit = async (
   userId: string,
   habit: Habit,
 ): Promise<Habit> => {
-  const url = `${baseUrl}`;
-  return await httpClient.post<Habit>(url, { userId, habit });
+  return httpClient.post<Habit>(`${baseUrl}`, { userId, habit });
 };
 
 export const updateHabit = async (
   userId: string,
   updatedHabit: Habit,
 ): Promise<Habit> => {
-  const url = `${baseUrl}/${updatedHabit.id}`;
-  return await httpClient.patch<Habit>(url, { userId, habit: updatedHabit });
+  return httpClient.patch<Habit>(`${baseUrl}/${updatedHabit.id}`, {
+    userId,
+    habit: updatedHabit,
+  });
 };
 
 export const deleteHabit = async (
   habitId: string,
   userId: string,
 ): Promise<void> => {
-  const query = queryString.stringify({ userId });
-  const url = `${baseUrl}/${habitId}?${query}`;
-  await httpClient.delete(url);
+  return httpClient.delete(`${baseUrl}/${habitId}`, { userId });
 };
 
 export const toggleHabitProgress = async (
@@ -41,6 +37,8 @@ export const toggleHabitProgress = async (
   habitId: string,
   progress: Record<string, boolean>,
 ): Promise<void> => {
-  const url = `${baseUrl}/${habitId}`;
-  await httpClient.patch(url, { userId, habit: { progress } });
+  return httpClient.patch(`${baseUrl}/${habitId}`, {
+    userId,
+    habit: { progress },
+  });
 };

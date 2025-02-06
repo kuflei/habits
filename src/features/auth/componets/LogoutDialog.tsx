@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormHelperText,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth";
@@ -28,8 +29,7 @@ const LogoutDialog: React.FC<AuthDialogProps> = (props) => {
       <DialogTitle>{t("logout")}</DialogTitle>
       <DialogContent>
         <p>{t("confirmLogout")}</p>
-        {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-        {/*TODO: update to mui*/}
+        {error && <FormHelperText error>{error}</FormHelperText>}{" "}
       </DialogContent>
       <DialogActions>
         <Button color="secondary" onClick={props.onClose}>
