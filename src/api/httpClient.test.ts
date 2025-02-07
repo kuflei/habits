@@ -1,4 +1,4 @@
-import { createHttpClient } from "./httpClient.ts";
+import { createHttpClient } from "./httpClient";
 
 describe("httpClient", () => {
   const baseUrl = "https://test.com";

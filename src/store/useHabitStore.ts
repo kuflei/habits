@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Habit } from "@/types/Habit";
-import * as api from "@/features/habits/api/apiHabits";
+import * as api from "@/api/habits.api";
 import { saveHabits } from "@/features/habits/storage/storageHabits";
 
 interface HabitStore {
