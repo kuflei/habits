@@ -1,4 +1,4 @@
-import { createHttpClient } from "@/features/api/httpClient";
+import { createHttpClient } from "@/api/httpClient";
 const httpClient = createHttpClient("/api");
 
 export const login = (email: string, password: string) => {

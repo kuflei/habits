@@ -1,4 +1,4 @@
-import { createHttpClient } from "@/features/api/httpClient";
+import { createHttpClient } from "@/api/httpClient";
 import { Habit } from "@/types/Habit";
 
 const httpClient = createHttpClient("/api");

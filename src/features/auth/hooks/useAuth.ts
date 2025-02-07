@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/authStore";
-import { login, logout } from "../api/authApi";
+import { login, logout } from "@/api/habits.api";
 
 export const useAuth = () => {
   const setUserId = useAuthStore((state) => state.setUserId);

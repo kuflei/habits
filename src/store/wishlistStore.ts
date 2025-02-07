@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createHttpClient } from "@/features/api/httpClient";
+import { createHttpClient } from "@/api/httpClient";
 import { storageFactory } from "@/utils/storageFactory";
 
 const httpClient = createHttpClient("/api");
