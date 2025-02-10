@@ -5,6 +5,7 @@ describe("httpClient", () => {
   const client = createHttpClient(baseUrl);
   const originalFetch = global.fetch;
   const mockFetch = jest.fn();
+  const urlEnpoint = "/test-endpoint";
 
   beforeEach(() => {
     global.fetch = mockFetch;
@@ -21,9 +22,9 @@ describe("httpClient", () => {
       json: async () => expectedData,
     });
 
-    const result = await client.get("/test-endpoint");
+    const result = await client.get(urlEnpoint);
 
-    expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}/test-endpoint`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}${urlEnpoint}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -35,7 +36,7 @@ describe("httpClient", () => {
       status: 404,
       text: async () => "404 not found",
     });
-    await expect(client.get("/test-endpoint")).rejects.toThrow(
+    await expect(client.get(urlEnpoint)).rejects.toThrow(
       "Error GET /test-endpoint",
     );
   });
@@ -46,8 +47,8 @@ describe("httpClient", () => {
       ok: true,
       json: async () => expectedData,
     });
-    const result = await client.post("/test-endpoint", payload);
-    expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}/test-endpoint`, {
+    const result = await client.post(urlEnpoint, payload);
+    expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}${urlEnpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -62,7 +63,7 @@ describe("httpClient", () => {
       text: async () => "Bad Request",
     });
 
-    await expect(client.post("/test-endpoint", payload)).rejects.toThrow(
+    await expect(client.post(urlEnpoint, payload)).rejects.toThrow(
       "HTTP request failed: Error: Error POST /test-endpoint: 400 - Bad Request",
     );
   });
@@ -72,9 +73,9 @@ describe("httpClient", () => {
       json: async () => ({}),
     });
 
-    await client.delete("/test-endpoint");
+    await client.delete(urlEnpoint);
 
-    expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}/test-endpoint`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}${urlEnpoint}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -87,7 +88,7 @@ describe("httpClient", () => {
       text: async () => "Bad Request",
     });
 
-    await expect(client.delete("/test-endpoint")).rejects.toThrow(
+    await expect(client.delete(urlEnpoint)).rejects.toThrow(
       "HTTP request failed: Error: Error DELETE /test-endpoint: 400 - Bad Request",
     );
   });
