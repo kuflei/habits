@@ -28,14 +28,6 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
   const { progress } = props.habit;
   const userId = useAuthStore((state) => state.userId);
   const { t } = useTranslation();
-  const cssBox = {
-    mt: 2,
-    p: 2,
-    backgroundColor: "#e7f5e7",
-    borderRadius: 1,
-    border: "1px solid #4caf50",
-    color: "#2e7d32",
-  };
   const dateRange = useMemo(() => getHabitDateRange(props.habit), [props.habit]);
 
   // Checking if habit done
@@ -69,7 +61,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
             <HabitCalendar habit={props.habit} />
           </Box>
           {isHabitCompleted && (
-            <Box sx={cssBox}>
+            <Box className="congratulations-message">
               <Typography variant="h6" color="primary">
                 🎉 {t("congratulations")} <strong>{props.habit.reward}</strong>
               </Typography>
