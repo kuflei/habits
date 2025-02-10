@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import Grid from "@mui/material/Grid2";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,14 +21,11 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
 
   const dateRange = useMemo(() => getHabitDateRange(props.habit), [props.habit]);
 
-  const handleDateClick = useCallback(
-    (date: string) => {
-      if (!dateRange.includes(date)) return;
+  const handleDateClick = (date: string) => {
+    if (!dateRange.includes(date)) return;
 
-      toggleHabitProgress(userId, props.habit.id, date);
-    },
-    [dateRange, toggleHabitProgress, userId, props.habit.id],
-  );
+    toggleHabitProgress(userId, props.habit.id, date);
+  };
 
   return (
     <Grid container spacing={1} sx={{ mt: 2 }}>
