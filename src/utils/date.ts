@@ -5,11 +5,7 @@ interface dateRangeOptions {
   end: string;
   frequency?: number;
 }
-export const generateDateRange = ({
-  start,
-  end,
-  frequency = 1,
-}: dateRangeOptions) => {
+export const generateDateRange = ({ start, end, frequency = 1 }: dateRangeOptions) => {
   const startDate = new Date(start);
   const endDate = new Date(end);
   const dates = [];

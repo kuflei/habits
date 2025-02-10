@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  ButtonGroup,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, ButtonGroup } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import AuthButton from "@/features/auth/componets/AuthButton";
@@ -42,20 +36,10 @@ export default function MainNavigation() {
         </Typography>
         {userId ? (
           <>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/habits"
-              sx={{ mr: 2 }}
-            >
+            <Button color="inherit" component={Link} to="/habits" sx={{ mr: 2 }}>
               {t("habits")}
             </Button>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/wishlist"
-              sx={{ mr: 2 }}
-            >
+            <Button color="inherit" component={Link} to="/wishlist" sx={{ mr: 2 }}>
               {t("wishlist")}
             </Button>
           </>

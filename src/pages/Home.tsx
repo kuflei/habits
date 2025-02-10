@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Snackbar,
-  Alert,
-  Typography,
-  Card,
-} from "@mui/material";
+import { Button, Dialog, DialogContent, DialogActions, Snackbar, Alert, Typography, Card } from "@mui/material";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
 import { useHabits } from "@/features/habits/hooks/useHabits";
@@ -41,26 +32,14 @@ const Home: React.FC = () => {
       {userId ? (
         <>
           <h1>{t("habitTracker")}</h1>
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-          >
-            <Alert
-              onClose={handleSnackbarClose}
-              severity="success"
-              variant="outlined"
-              sx={{ width: "100%" }}
-            >
+          <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+            <Alert onClose={handleSnackbarClose} severity="success" variant="outlined" sx={{ width: "100%" }}>
               {t("added")}
             </Alert>
           </Snackbar>
           <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <DialogContent>
-              <HabitForm
-                onClose={() => setIsModalOpen(false)}
-                onSubmit={handleHabitAdded}
-              />
+              <HabitForm onClose={() => setIsModalOpen(false)} onSubmit={handleHabitAdded} />
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setIsModalOpen(false)} color="primary">
@@ -86,11 +65,7 @@ const Home: React.FC = () => {
               </Typography>
             )}
           </div>
-          <Button
-            variant="contained"
-            sx={cssButton}
-            onClick={() => setIsModalOpen(true)}
-          >
+          <Button variant="contained" sx={cssButton} onClick={() => setIsModalOpen(true)}>
             {t("addNewHabit")}
           </Button>
         </>

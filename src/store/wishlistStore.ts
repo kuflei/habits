@@ -72,9 +72,7 @@ export const useWishlistStore = create(
           await httpClient.delete(`/wishlist/${itemId}`, { userId });
 
           set((state) => {
-            const updatedWishlist = state.wishlist.filter(
-              (item) => item.id !== itemId,
-            );
+            const updatedWishlist = state.wishlist.filter((item) => item.id !== itemId);
 
             localStorageAPI.setItem(`wishlist-${userId}`, updatedWishlist);
 

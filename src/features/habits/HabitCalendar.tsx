@@ -13,12 +13,8 @@ interface HabitCalendarProps {
 }
 
 const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
-  const toggleHabitProgress = useHabitStore(
-    (state) => state.toggleHabitProgress,
-  );
-  const habit = useHabitStore((state) =>
-    state.habits.find((h) => h.id === props.habit.id),
-  );
+  const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
+  const habit = useHabitStore((state) => state.habits.find((h) => h.id === props.habit.id));
   const progress = habit ? habit.progress : {};
   const userId = useAuthStore((state) => state.userId);
 
@@ -30,10 +26,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
     }),
     [props.habit.startDate, props.habit.endDate, props.habit.frequency],
   );
-  const dateRange = useMemo(
-    () => generateDateRange(dateRangeOptions),
-    [dateRangeOptions],
-  );
+  const dateRange = useMemo(() => generateDateRange(dateRangeOptions), [dateRangeOptions]);
 
   const handleDateClick = useCallback(
     (date: string) => {
@@ -50,13 +43,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
         <DateCalendar
           onChange={(date) => handleDateClick(date?.format("YYYY-MM-DD") || "")}
           slots={{
-            day: (dayProps) => (
-              <HabitCalendarDay
-                {...dayProps}
-                progress={progress}
-                dateRange={dateRange}
-              />
-            ),
+            day: (dayProps) => <HabitCalendarDay {...dayProps} progress={progress} dateRange={dateRange} />,
           }}
         />
       </LocalizationProvider>

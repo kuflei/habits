@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Typography,
-  Button,
-  Box,
-  Dialog,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
+import { Card, CardHeader, CardContent, Typography, Button, Box, Dialog, DialogContent, DialogActions } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
@@ -54,10 +44,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
           backgroundColor: isHabitCompleted ? "#eeeeee" : "#fff",
         }}
       >
-        <CardHeader
-          title={props.habit.name}
-          subheader={`🎯` + t("frequency") + ` ${props.habit.frequency}`}
-        />
+        <CardHeader title={props.habit.name} subheader={`🎯` + t("frequency") + ` ${props.habit.frequency}`} />
         <CardContent>
           <Typography variant="body2" color="textSecondary">
             📅 {t("period")} {props.habit.startDate} - {props.habit.endDate}
@@ -81,19 +68,11 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
           )}
           <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
             {!isHabitCompleted && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setIsEditing(true)}
-              >
+              <Button variant="contained" color="primary" onClick={() => setIsEditing(true)}>
                 {t("edit")}
               </Button>
             )}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => deleteHabit(props.habit.id, userId)}
-            >
+            <Button variant="contained" color="secondary" onClick={() => deleteHabit(props.habit.id, userId)}>
               {t("delete")}
             </Button>
           </Box>

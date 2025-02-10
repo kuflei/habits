@@ -13,15 +13,7 @@ describe("InputDate", () => {
     onChange: jest.fn(),
   };
   const renderComponent = (props: InputDateProps) => {
-    return render(
-      <InputDate
-        label={props.label}
-        name={props.name}
-        value={props.value}
-        onChange={props.onChange}
-        min={props.min}
-      />,
-    );
+    return render(<InputDate label={props.label} name={props.name} value={props.value} onChange={props.onChange} min={props.min} />);
   };
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,9 +25,7 @@ describe("InputDate", () => {
       name: defaultProps.label,
     });
     expect(datePickerInput).toBeInTheDocument();
-    expect(datePickerInput).toHaveValue(
-      dayjs(defaultProps.value).format(DEFAULT_DATE_FORMAT),
-    );
+    expect(datePickerInput).toHaveValue(dayjs(defaultProps.value).format(DEFAULT_DATE_FORMAT));
     expect(true).toBe(true);
   });
   it("Should call onChange with the correctly formatted date", async () => {
@@ -47,9 +37,6 @@ describe("InputDate", () => {
 
     const datePickerInput = screen.getByRole("textbox", { name: props.label });
     await userEvent.type(datePickerInput, mockDate);
-    expect(mockOnChange).toHaveBeenCalledWith(
-      props.name,
-      dayjs(mockDate).format(DEFAULT_DATE_FORMAT),
-    );
+    expect(mockOnChange).toHaveBeenCalledWith(props.name, dayjs(mockDate).format(DEFAULT_DATE_FORMAT));
   });
 });

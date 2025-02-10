@@ -23,9 +23,7 @@ export const createHttpClient = (baseUrl: string) => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(
-          `Error ${method} ${url}: ${response.status} - ${errorText}`,
-        );
+        throw new Error(`Error ${method} ${url}: ${response.status} - ${errorText}`);
       }
 
       return response.json();
@@ -35,22 +33,14 @@ export const createHttpClient = (baseUrl: string) => {
   };
 
   const httpMethod =
-    <T, P = Record<string, unknown>>(
-      method: "GET" | "POST" | "PATCH" | "DELETE",
-    ) =>
-    async (
-      url: string,
-      payload?: P,
-      queryParams?: Record<string, unknown>,
-    ): Promise<T> =>
+    <T, P = Record<string, unknown>>(method: "GET" | "POST" | "PATCH" | "DELETE") =>
+    async (url: string, payload?: P, queryParams?: Record<string, unknown>): Promise<T> =>
       request<T, P>(url, method, payload, queryParams);
 
   return {
-    get: (url: string, queryParams?: Record<string, unknown>) =>
-      httpMethod("GET")(url, undefined, queryParams),
+    get: (url: string, queryParams?: Record<string, unknown>) => httpMethod("GET")(url, undefined, queryParams),
     post: httpMethod("POST"),
     patch: httpMethod("PATCH"),
-    delete: (url: string, queryParams?: Record<string, unknown>) =>
-      httpMethod("DELETE")(url, undefined, queryParams),
+    delete: (url: string, queryParams?: Record<string, unknown>) => httpMethod("DELETE")(url, undefined, queryParams),
   };
 };

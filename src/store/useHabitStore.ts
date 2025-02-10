@@ -11,11 +11,7 @@ interface HabitStore {
   addHabit: (userId: string, habit: Habit) => Promise<void>;
   updateHabit: (userId: string, updatedHabit: Habit) => Promise<void>;
   deleteHabit: (userId: string, id: string) => Promise<void>;
-  toggleHabitProgress: (
-    userId: string,
-    id: string,
-    date: string,
-  ) => Promise<void>;
+  toggleHabitProgress: (userId: string, id: string, date: string) => Promise<void>;
 }
 
 export const useHabitStore = create(
@@ -54,9 +50,7 @@ export const useHabitStore = create(
         try {
           const updated = await api.updateHabit(userId, updatedHabit);
           set((state) => {
-            const updatedHabits = state.habits.map((habit) =>
-              habit.id === updated.id ? updated : habit,
-            );
+            const updatedHabits = state.habits.map((habit) => (habit.id === updated.id ? updated : habit));
             saveHabits(userId, updatedHabits);
             return { habits: updatedHabits };
           });
@@ -69,9 +63,7 @@ export const useHabitStore = create(
         try {
           await api.deleteHabit(habitId, userId);
           set((state) => {
-            const updatedHabits = state.habits.filter(
-              (habit) => habit.id !== habitId,
-            );
+            const updatedHabits = state.habits.filter((habit) => habit.id !== habitId);
             saveHabits(userId, updatedHabits);
             return { habits: updatedHabits };
           });
@@ -80,11 +72,7 @@ export const useHabitStore = create(
         }
       },
 
-      toggleHabitProgress: async (
-        userId: string,
-        habitId: string,
-        date: string,
-      ) => {
+      toggleHabitProgress: async (userId: string, habitId: string, date: string) => {
         set((state) => ({
           habits: state.habits.map((habit) =>
             habit.id === habitId

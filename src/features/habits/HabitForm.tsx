@@ -1,14 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  Typography,
-  TextField,
-  MenuItem,
-} from "@mui/material";
+import { Button, FormControl, FormHelperText, Typography, TextField, MenuItem } from "@mui/material";
 import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
 import { today } from "@/utils/date";
@@ -35,8 +28,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
       startDate: props.habit?.startDate || "",
       endDate: props.habit?.endDate || "",
       frequency: props.habit?.frequency || 1,
-      reward:
-        props.habit?.reward || (wishlist.length > 0 ? wishlist[0].name : ""),
+      reward: props.habit?.reward || (wishlist.length > 0 ? wishlist[0].name : ""),
     },
     validate,
     onSubmit: async (values) => {
@@ -72,9 +64,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
           value={formik.values.name}
           onChange={formik.handleChange}
         />
-        {formik.touched.name && formik.errors.name && (
-          <FormHelperText>{formik.errors.name}</FormHelperText>
-        )}
+        {formik.touched.name && formik.errors.name && <FormHelperText>{formik.errors.name}</FormHelperText>}
       </FormControl>
       <FormControl fullWidth margin="normal">
         <InputDate
@@ -84,9 +74,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
           onChange={(name, value) => formik.setFieldValue(name, value)}
           min={today}
         />
-        {formik.touched.startDate && formik.errors.startDate && (
-          <FormHelperText>{formik.errors.startDate}</FormHelperText>
-        )}
+        {formik.touched.startDate && formik.errors.startDate && <FormHelperText>{formik.errors.startDate}</FormHelperText>}
       </FormControl>
       <FormControl fullWidth margin="normal">
         <InputDate
@@ -96,9 +84,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
           onChange={(name, value) => formik.setFieldValue(name, value)}
           min={formik.values.startDate || today}
         />
-        {formik.touched.endDate && formik.errors.endDate && (
-          <FormHelperText>{formik.errors.endDate}</FormHelperText>
-        )}
+        {formik.touched.endDate && formik.errors.endDate && <FormHelperText>{formik.errors.endDate}</FormHelperText>}
       </FormControl>
       <FormControl fullWidth margin="normal">
         <TextField
@@ -110,9 +96,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
           onChange={formik.handleChange}
           inputProps={{ min: 1 }}
         />
-        {formik.touched.frequency && formik.errors.frequency && (
-          <FormHelperText>{formik.errors.frequency}</FormHelperText>
-        )}
+        {formik.touched.frequency && formik.errors.frequency && <FormHelperText>{formik.errors.frequency}</FormHelperText>}
       </FormControl>
       <FormControl fullWidth margin="normal">
         <TextField
@@ -120,9 +104,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
           label={t("reward")}
           name="reward"
           value={formik.values.reward || ""}
-          onChange={(event) =>
-            formik.setFieldValue("reward", event.target.value)
-          }
+          onChange={(event) => formik.setFieldValue("reward", event.target.value)}
         >
           {wishlist.length > 0 ? (
             wishlist.map((reward) => (
@@ -134,26 +116,13 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
             <MenuItem value="">{t("noOptionsAvailable")}</MenuItem>
           )}
         </TextField>
-        {formik.touched.reward && formik.errors.reward && (
-          <FormHelperText>{formik.errors.reward}</FormHelperText>
-        )}
+        {formik.touched.reward && formik.errors.reward && <FormHelperText>{formik.errors.reward}</FormHelperText>}
       </FormControl>
 
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mr: 2, mt: 3 }}
-        type="submit"
-      >
+      <Button variant="contained" color="primary" sx={{ mr: 2, mt: 3 }} type="submit">
         {props.habit ? t("save") : t("add")}
       </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        type="button"
-        sx={{ mt: 3 }}
-        onClick={props.onClose}
-      >
+      <Button variant="contained" color="secondary" type="button" sx={{ mt: 3 }} onClick={props.onClose}>
         {t("cancel")}
       </Button>
     </form>

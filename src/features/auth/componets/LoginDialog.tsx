@@ -1,13 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth";
 import { AuthDialogProps } from "@/types/AuthDialogProps";

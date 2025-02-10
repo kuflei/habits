@@ -12,9 +12,7 @@ export const useHabits = (userId: string | null) => {
       return;
     }
 
-    const storedHabits = JSON.parse(
-      localStorage.getItem(`habits-${userId}`) || "[]",
-    );
+    const storedHabits = JSON.parse(localStorage.getItem(`habits-${userId}`) || "[]");
 
     if (storedHabits.length > 0) {
       setHabits({ habits: storedHabits });

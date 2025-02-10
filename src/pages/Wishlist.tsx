@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  FormControl,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  TextField,
-} from "@mui/material";
+import { Button, Card, CardContent, Typography, FormControl, Dialog, DialogContent, DialogActions, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 
@@ -39,20 +29,12 @@ const Wishlist = () => {
               <Typography variant="h6">{item.name}</Typography>
             </CardContent>
           </Card>
-          <Button
-            sx={{ mb: 4 }}
-            variant="contained"
-            onClick={() => removeItem(item.id)}
-          >
+          <Button sx={{ mb: 4 }} variant="contained" onClick={() => removeItem(item.id)}>
             {t("delete")}
           </Button>
         </div>
       ))}
-      <Button
-        variant="contained"
-        sx={{ ml: "auto", display: "block" }}
-        onClick={() => setIsModalOpen(true)}
-      >
+      <Button variant="contained" sx={{ ml: "auto", display: "block" }} onClick={() => setIsModalOpen(true)}>
         {t("newWishlistItem")}
       </Button>
       <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)}>

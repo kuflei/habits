@@ -16,14 +16,7 @@ export const Default = () => {
     action(`Changed ${name}`)(newValue);
   };
 
-  return (
-    <InputDate
-      label="Select Date"
-      name="date"
-      value={value}
-      onChange={handleChange}
-    />
-  );
+  return <InputDate label="Select Date" name="date" value={value} onChange={handleChange} />;
 };
 
 export const WithInitialValue = () => {
@@ -33,14 +26,7 @@ export const WithInitialValue = () => {
     action(`Changed ${name}`)(newValue);
   };
 
-  return (
-    <InputDate
-      label="Start Date"
-      name="startDate"
-      value={value}
-      onChange={handleChange}
-    />
-  );
+  return <InputDate label="Start Date" name="startDate" value={value} onChange={handleChange} />;
 };
 
 export const MinDate = () => {
@@ -50,13 +36,5 @@ export const MinDate = () => {
     action(`Changed ${name}`)(newValue);
   };
 
-  return (
-    <InputDate
-      label="End Date"
-      name="endDate"
-      value={value}
-      onChange={handleChange}
-      min="2025-02-01"
-    />
-  );
+  return <InputDate label="End Date" name="endDate" value={value} onChange={handleChange} min="2025-02-01" />;
 };
