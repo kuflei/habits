@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Dialog, DialogContent, DialogActions, Snackbar, Alert, Typography, Card } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Snackbar,
+  Alert,
+  Typography,
+  Card,
+} from "@mui/material";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
 import { useHabits } from "@/features/habits/hooks/useHabits";
@@ -33,7 +42,12 @@ const Home: React.FC = () => {
         <>
           <h1>{t("habitTracker")}</h1>
           <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-            <Alert onClose={handleSnackbarClose} severity="success" variant="outlined" sx={{ width: "100%" }}>
+            <Alert
+              onClose={handleSnackbarClose}
+              severity="success"
+              variant="outlined"
+              sx={{ width: "100%" }}
+            >
               {t("added")}
             </Alert>
           </Snackbar>

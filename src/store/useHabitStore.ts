@@ -50,7 +50,9 @@ export const useHabitStore = create(
         try {
           const updated = await api.updateHabit(userId, updatedHabit);
           set((state) => {
-            const updatedHabits = state.habits.map((habit) => (habit.id === updated.id ? updated : habit));
+            const updatedHabits = state.habits.map((habit) =>
+              habit.id === updated.id ? updated : habit,
+            );
             saveHabits(userId, updatedHabits);
             return { habits: updatedHabits };
           });

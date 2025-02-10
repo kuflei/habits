@@ -36,5 +36,13 @@ export const MinDate = () => {
     action(`Changed ${name}`)(newValue);
   };
 
-  return <InputDate label="End Date" name="endDate" value={value} onChange={handleChange} min="2025-02-01" />;
+  return (
+    <InputDate
+      label="End Date"
+      name="endDate"
+      value={value}
+      onChange={handleChange}
+      min="2025-02-01"
+    />
+  );
 };

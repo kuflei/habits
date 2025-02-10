@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormHelperText } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormHelperText,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth";
 import { AuthDialogProps } from "@/types/AuthDialogProps";

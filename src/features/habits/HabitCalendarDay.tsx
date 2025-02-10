@@ -2,9 +2,21 @@ import React from "react";
 import { PickersDay } from "@mui/x-date-pickers";
 import { PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 import dayjs, { Dayjs } from "dayjs";
+import { DATE_FORMAT } from "../../shared/constants/date";
 
-const getDayStyles = (isCompleted: boolean, isMissed: boolean, isInRange: boolean, isPastOrToday: boolean) => ({
-  backgroundColor: isCompleted ? "#4CAF50" : isMissed ? "#FF6B6B" : isInRange ? "#FFF5E1" : "transparent",
+const getDayStyles = (
+  isCompleted: boolean,
+  isMissed: boolean,
+  isInRange: boolean,
+  isPastOrToday: boolean,
+) => ({
+  backgroundColor: isCompleted
+    ? "#4CAF50"
+    : isMissed
+      ? "#FF6B6B"
+      : isInRange
+        ? "#FFF5E1"
+        : "transparent",
   color: isCompleted || isMissed ? "white" : "black",
   borderRadius: "4px",
   "&.Mui-selected": {
@@ -13,7 +25,13 @@ const getDayStyles = (isCompleted: boolean, isMissed: boolean, isInRange: boolea
     fontWeight: 500,
   },
   "&:focus.Mui-selected": {
-    backgroundColor: isCompleted ? "#4CAF50" : isMissed ? "#FF6B6B" : isInRange ? "#FFF5E1" : "transparent",
+    backgroundColor: isCompleted
+      ? "#4CAF50"
+      : isMissed
+        ? "#FF6B6B"
+        : isInRange
+          ? "#FFF5E1"
+          : "transparent",
     color: "#fff",
     fontWeight: 500,
   },
@@ -29,14 +47,20 @@ interface HabitCalendarDayProps extends PickersDayProps<Dayjs> {
 
 const HabitCalendarDay: React.FC<HabitCalendarDayProps> = (props) => {
   const { day, progress, dateRange, ...rest } = props;
-  const formattedDay = day.format("YYYY-MM-DD");
+  const formattedDay = day.format(DATE_FORMAT);
 
   const isInRange = dateRange.includes(formattedDay);
-  const isPastOrToday = dayjs(formattedDay).isSame(dayjs(), "day") || dayjs(formattedDay).isBefore(dayjs(), "day");
+  const isPastOrToday =
+    dayjs(formattedDay).isSame(dayjs(), "day") || dayjs(formattedDay).isBefore(dayjs(), "day");
   const isCompleted = progress?.[formattedDay] ?? false;
   const isMissed = isInRange && !isCompleted && dayjs(formattedDay).isBefore(dayjs(), "day");
   return (
-    <PickersDay {...rest} day={day} disabled={!(isInRange && isPastOrToday)} sx={getDayStyles(isCompleted, isMissed, isInRange, isPastOrToday)} />
+    <PickersDay
+      {...rest}
+      day={day}
+      disabled={!(isInRange && isPastOrToday)}
+      sx={getDayStyles(isCompleted, isMissed, isInRange, isPastOrToday)}
+    />
   );
 };
 

@@ -1,12 +1,22 @@
-import React, { useState } from "react";
-import { Card, CardHeader, CardContent, Typography, Button, Box, Dialog, DialogContent, DialogActions } from "@mui/material";
+import React, { useMemo, useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Dialog,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
 import HabitCalendar from "@/features/habits/HabitCalendar";
 import HabitForm from "@/features/habits/HabitForm";
-import { generateDateRange } from "@/utils/date";
 import { useAuthStore } from "@/store/authStore";
+import { getHabitDateRange } from "@/utils/habitDateRange";
 
 interface HabitItemProps {
   habit: Habit;
@@ -15,14 +25,9 @@ interface HabitItemProps {
 const HabitItem: React.FC<HabitItemProps> = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const deleteHabit = useHabitStore((state) => state.deleteHabit);
-  const { progress, startDate, endDate, reward, frequency } = props.habit;
+  const { progress } = props.habit;
   const userId = useAuthStore((state) => state.userId);
   const { t } = useTranslation();
-  const dateRangeOptions = {
-    start: startDate,
-    end: endDate,
-    frequency: frequency,
-  };
   const cssBox = {
     mt: 2,
     p: 2,
@@ -31,10 +36,11 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
     border: "1px solid #4caf50",
     color: "#2e7d32",
   };
-  const dateRange = generateDateRange(dateRangeOptions);
+  const dateRange = useMemo(() => getHabitDateRange(props.habit), [props.habit]);
 
   // Checking if habit done
   const isHabitCompleted = dateRange.every((date) => progress[date]);
+
   return (
     <div>
       <Card
@@ -44,7 +50,10 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
           backgroundColor: isHabitCompleted ? "#eeeeee" : "#fff",
         }}
       >
-        <CardHeader title={props.habit.name} subheader={`🎯` + t("frequency") + ` ${props.habit.frequency}`} />
+        <CardHeader
+          title={props.habit.name}
+          subheader={`🎯` + t("frequency") + ` ${props.habit.frequency}`}
+        />
         <CardContent>
           <Typography variant="body2" color="textSecondary">
             📅 {t("period")} {props.habit.startDate} - {props.habit.endDate}
@@ -62,7 +71,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
           {isHabitCompleted && (
             <Box sx={cssBox}>
               <Typography variant="h6" color="primary">
-                🎉 {t("congratulations")} <strong>{reward}</strong>
+                🎉 {t("congratulations")} <strong>{props.habit.reward}</strong>
               </Typography>
             </Box>
           )}
@@ -72,7 +81,11 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
                 {t("edit")}
               </Button>
             )}
-            <Button variant="contained" color="secondary" onClick={() => deleteHabit(props.habit.id, userId)}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => deleteHabit(props.habit.id, userId)}
+            >
               {t("delete")}
             </Button>
           </Box>

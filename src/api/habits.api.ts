@@ -23,7 +23,11 @@ export const deleteHabit = async (habitId: string, userId: string): Promise<void
   return httpClient.delete(`${baseUrl}/${habitId}`, { userId });
 };
 
-export const toggleHabitProgress = async (userId: string, habitId: string, progress: Record<string, boolean>): Promise<void> => {
+export const toggleHabitProgress = async (
+  userId: string,
+  habitId: string,
+  progress: Record<string, boolean>,
+): Promise<void> => {
   return httpClient.patch(`${baseUrl}/${habitId}`, {
     userId,
     habit: { progress },

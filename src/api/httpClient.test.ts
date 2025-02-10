@@ -61,7 +61,9 @@ describe("httpClient", () => {
       text: async () => "Bad Request",
     });
 
-    await expect(client.post(urlEnpoint, payload)).rejects.toThrow("HTTP request failed: Error: Error POST /test-endpoint: 400 - Bad Request");
+    await expect(client.post(urlEnpoint, payload)).rejects.toThrow(
+      "HTTP request failed: Error: Error POST /test-endpoint: 400 - Bad Request",
+    );
   });
   it("should make a DELETE request successfully", async () => {
     mockFetch.mockResolvedValueOnce({
@@ -84,6 +86,8 @@ describe("httpClient", () => {
       text: async () => "Bad Request",
     });
 
-    await expect(client.delete(urlEnpoint)).rejects.toThrow("HTTP request failed: Error: Error DELETE /test-endpoint: 400 - Bad Request");
+    await expect(client.delete(urlEnpoint)).rejects.toThrow(
+      "HTTP request failed: Error: Error DELETE /test-endpoint: 400 - Bad Request",
+    );
   });
 });

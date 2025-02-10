@@ -38,9 +38,11 @@ export const createHttpClient = (baseUrl: string) => {
       request<T, P>(url, method, payload, queryParams);
 
   return {
-    get: (url: string, queryParams?: Record<string, unknown>) => httpMethod("GET")(url, undefined, queryParams),
+    get: (url: string, queryParams?: Record<string, unknown>) =>
+      httpMethod("GET")(url, undefined, queryParams),
     post: httpMethod("POST"),
     patch: httpMethod("PATCH"),
-    delete: (url: string, queryParams?: Record<string, unknown>) => httpMethod("DELETE")(url, undefined, queryParams),
+    delete: (url: string, queryParams?: Record<string, unknown>) =>
+      httpMethod("DELETE")(url, undefined, queryParams),
   };
 };

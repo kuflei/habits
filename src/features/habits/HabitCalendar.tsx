@@ -5,8 +5,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
 import { useAuthStore } from "@/store/authStore";
-import { generateDateRange } from "@/utils/date";
 import HabitCalendarDay from "@/features/habits/HabitCalendarDay";
+import { DATE_FORMAT } from "../../shared/constants/date";
+import { getHabitDateRange } from "@/utils/habitDateRange";
 
 interface HabitCalendarProps {
   habit: Habit;
@@ -18,15 +19,7 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
   const progress = habit ? habit.progress : {};
   const userId = useAuthStore((state) => state.userId);
 
-  const dateRangeOptions = useMemo(
-    () => ({
-      start: props.habit.startDate,
-      end: props.habit.endDate,
-      frequency: props.habit.frequency,
-    }),
-    [props.habit.startDate, props.habit.endDate, props.habit.frequency],
-  );
-  const dateRange = useMemo(() => generateDateRange(dateRangeOptions), [dateRangeOptions]);
+  const dateRange = useMemo(() => getHabitDateRange(props.habit), [props.habit]);
 
   const handleDateClick = useCallback(
     (date: string) => {
@@ -41,9 +34,11 @@ const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
     <Grid container spacing={1} sx={{ mt: 2 }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
-          onChange={(date) => handleDateClick(date?.format("YYYY-MM-DD") || "")}
+          onChange={(date) => handleDateClick(date?.format(DATE_FORMAT) || "")}
           slots={{
-            day: (dayProps) => <HabitCalendarDay {...dayProps} progress={progress} dateRange={dateRange} />,
+            day: (dayProps) => (
+              <HabitCalendarDay {...dayProps} progress={progress} dateRange={dateRange} />
+            ),
           }}
         />
       </LocalizationProvider>
