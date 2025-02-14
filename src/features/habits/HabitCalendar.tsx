@@ -6,7 +6,7 @@ import { Habit } from "@/types/Habit";
 import { useHabitStore } from "@/store/useHabitStore";
 import { useAuthStore } from "@/store/authStore";
 import HabitCalendarDay from "@/features/habits/HabitCalendarDay";
-import { DATE_FORMAT } from "../../shared/constants/date";
+import { DATE_FORMAT } from "@/shared/constants/date";
 import { getHabitDateRange } from "@/utils/habitDateRange";
 
 interface HabitCalendarProps {
