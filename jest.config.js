@@ -8,6 +8,7 @@ export default {
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
     '^@testing-library/user-event$': '<rootDir>/node_modules/@testing-library/user-event',
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
 
 };

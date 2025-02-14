@@ -2,7 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import dayjs from "dayjs";
 import { describe } from "node:test";
-import InputDate, { InputDateProps, DEFAULT_DATE_FORMAT } from "./InputDate";
+import InputDate, { InputDateProps } from "./InputDate";
+import { DEFAULT_DATE_FORMAT } from "../shared/constants/date";
 
 describe("InputDate", () => {
   const defaultProps: InputDateProps = {
