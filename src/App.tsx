@@ -10,10 +10,10 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-      <Container maxWidth="lg" sx={{ mb: 12 }}>
-        <MainNavigation />
-        <AppRoutes />
-      </Container>
+        <Container maxWidth="lg" sx={{ mb: 12 }}>
+          <MainNavigation />
+          <AppRoutes />
+        </Container>
       </QueryClientProvider>
     </ErrorBoundary>
   );
