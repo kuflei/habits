@@ -7,7 +7,6 @@ import { saveHabits } from "@/features/habits/storage/storageHabits";
 interface HabitStore {
   habits: Habit[];
   userId: string | null;
-  fetchHabits: (userId: string) => Promise<void>;
   addHabit: (userId: string, habit: Habit) => Promise<void>;
   updateHabit: (userId: string, updatedHabit: Habit) => Promise<void>;
   deleteHabit: (userId: string, id: string) => Promise<void>;
@@ -19,19 +18,6 @@ export const useHabitStore = create(
     (set, get) => ({
       habits: [],
       userId: null,
-
-      fetchHabits: async (userId: string) => {
-        try {
-          const habits = await api.fetchHabits(userId);
-          set((state) => {
-            const updatedState = { ...state, habits, userId };
-            saveHabits(userId, habits);
-            return updatedState;
-          });
-        } catch (error) {
-          console.error("Error fetching habits:", error);
-        }
-      },
 
       addHabit: async (userId: string, habit: Habit) => {
         try {

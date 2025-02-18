@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { t } = useTranslation();
   const userId = useAuthStore((state) => state.userId);
-  const habits = useHabits(userId);
+  const { data: habits, isLoading, error } = useHabits(userId);
   const cssButton = {
     backgroundColor: "#4caf50",
     color: "#fff",
@@ -35,6 +35,8 @@ const Home: React.FC = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+  if (isLoading) return <h2>⏳ Завантаження...</h2>;
+  if (error) return <h2>❌ Помилка: {error.message}</h2>;
 
   return (
     <div className="home-page">

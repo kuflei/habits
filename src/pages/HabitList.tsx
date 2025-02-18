@@ -5,8 +5,11 @@ import { useHabits } from "@/features/habits/hooks/useHabits";
 
 const HabitList = () => {
   const userId = useAuthStore((state) => state.userId);
-  const habits = useHabits(userId);
+  const { data: habits, isLoading, error } = useHabits(userId);
   const { t } = useTranslation();
+
+  if (isLoading) return <h2>⏳ Завантаження...</h2>;
+  if (error) return <h2>❌ Помилка: {error.message}</h2>;
 
   if (!Array.isArray(habits) || habits.length === 0) {
     return <p>{t("noHabitsAvailable")}</p>;

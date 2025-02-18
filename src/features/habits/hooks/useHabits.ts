@@ -1,25 +1,9 @@
-import { useEffect } from "react";
-import { useHabitStore } from "@/store/useHabitStore";
+import { useQuery } from "@tanstack/react-query";
+import { fetchHabits } from "@/api/habits.api";
 
-export const useHabits = (userId: string | null) => {
-  const habits = useHabitStore((state) => state.habits);
-  const fetchHabits = useHabitStore((state) => state.fetchHabits);
-  const setHabits = useHabitStore.setState;
-
-  useEffect(() => {
-    if (!userId) {
-      console.error("No userId provided");
-      return;
-    }
-
-    const storedHabits = JSON.parse(localStorage.getItem(`habits-${userId}`) || "[]");
-
-    if (storedHabits.length > 0) {
-      setHabits({ habits: storedHabits });
-    } else {
-      fetchHabits(userId);
-    }
-  }, [userId, fetchHabits, setHabits]);
-
-  return habits;
+export const useHabits = (userId: string) => {
+  return useQuery({
+    queryKey: ["habits", userId],
+    queryFn: () => fetchHabits(userId),
+  });
 };
