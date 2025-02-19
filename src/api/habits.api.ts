@@ -4,18 +4,8 @@ import { Habit } from "@/types/Habit";
 const httpClient = createHttpClient("/api");
 const baseUrl = "/habits";
 
-export const fetchHabits = async (
-  userId: string,
-  page: number,
-  perPage: number,
-): Promise<Habit[]> => {
-  const queryParams = new URLSearchParams({
-    userId: userId,
-    page: page.toString(),
-    perPage: perPage.toString(),
-  });
-
-  return httpClient.get<Habit[]>(`${baseUrl}?${queryParams}`);
+export const fetchHabits = async (userId: string): Promise<Habit[]> => {
+  return httpClient.get<Habit[]>(`${baseUrl}`, { userId });
 };
 
 export const addHabit = async (userId: string, habit: Habit): Promise<Habit> => {

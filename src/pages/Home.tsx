@@ -9,7 +9,6 @@ import {
   Alert,
   Typography,
   Card,
-  Pagination,
 } from "@mui/material";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
@@ -18,11 +17,9 @@ import { useHabits } from "@/features/habits/hooks/useHabits";
 const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 5;
   const { t } = useTranslation();
   const userId = useAuthStore((state) => state.userId);
-  const { data: habits, isLoading, error } = useHabits(userId, currentPage, perPage);
+  const { data: habits, isLoading, error } = useHabits(userId);
   const cssButton = {
     backgroundColor: "#4caf50",
     color: "#fff",
@@ -38,14 +35,7 @@ const Home: React.FC = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
-  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
-    setCurrentPage(value);
-  };
-
   if (isLoading) return <h2>⏳ Завантаження...</h2>;
-  const totalPages = Math.ceil(habits.length / perPage);
-
   if (error) return <h2>❌ Помилка: {error.message}</h2>;
 
   return (
@@ -91,15 +81,6 @@ const Home: React.FC = () => {
               </Typography>
             )}
           </div>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-            shape="rounded"
-            sx={{ display: "flex", justifyContent: "center", mt: 3 }}
-          />
-
           <Button variant="contained" sx={cssButton} onClick={() => setIsModalOpen(true)}>
             {t("addNewHabit")}
           </Button>

@@ -2,13 +2,10 @@ import { useTranslation } from "react-i18next";
 import HabitItem from "@/pages/HabitItem";
 import { useAuthStore } from "@/store/authStore";
 import { useHabits } from "@/features/habits/hooks/useHabits";
-import { useState } from "react";
 
 const HabitList = () => {
   const userId = useAuthStore((state) => state.userId);
-  const currentPage = 1;
-  const perPage = 5;
-  const { data: habits, isLoading, error } = useHabits(userId, currentPage, perPage);
+  const { data: habits, isLoading, error } = useHabits(userId);
 
   const { t } = useTranslation();
 
