@@ -7,6 +7,13 @@ const baseUrl = "/habits";
 export const fetchHabits = async (userId: string): Promise<Habit[]> => {
   return httpClient.get<Habit[]>(`${baseUrl}`, { userId });
 };
+export const fetchPaginationHabits = async (
+  userId: string,
+  page: number,
+  perPage: number,
+): Promise<Habit[]> => {
+  return httpClient.get<Habit[]>(`${baseUrl}?userId=${userId}&page=${page}&limit=${perPage}`);
+};
 
 export const addHabit = async (userId: string, habit: Habit): Promise<Habit> => {
   return httpClient.post<Habit>(`${baseUrl}`, { userId, habit });
