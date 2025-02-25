@@ -16,6 +16,7 @@ import { validate } from "@/utils/validate";
 import InputDate from "@/components/InputDate";
 import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 import { useAuthStore } from "@/store/authStore";
+import {useAddHabits} from "./hooks/useHabits.ts";
 
 interface HabitFormProps {
   habit?: Habit;
@@ -26,7 +27,8 @@ interface HabitFormProps {
 const HabitForm: React.FC<HabitFormProps> = (props) => {
   const userId = useAuthStore((state) => state.userId);
   const { wishlist } = useWishlist();
-  const addHabit = useHabitStore((state) => state.addHabit);
+
+  const addHabit = useAddHabits();
   const updateHabit = useHabitStore((state) => state.updateHabit);
   const { t } = useTranslation();
   const formik = useFormik({
@@ -47,9 +49,18 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
           ...values,
           progress: {},
         };
-        addHabit(userId, newHabit);
+        console.log(newHabit)
+        addHabit.mutate(
+          { userId, newHabit },
+          {
+            onError: (error) => {
+              console.error("Error adding habit:", error);
+            },
+          }
+        );
       }
       if (props.onSubmit) {
+        console.log("Formik values:", values);
         props.onSubmit();
       }
       props.onClose();
