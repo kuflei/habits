@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Habit } from "@/types/Habit";
-import { useHabitStore } from "@/store/useHabitStore";
 import HabitCalendar from "@/features/habits/HabitCalendar";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
