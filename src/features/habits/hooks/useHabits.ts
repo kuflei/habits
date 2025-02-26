@@ -19,7 +19,7 @@ export const useAddHabits = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: { userId: string, habit: Habit }) => addHabit(params.userId, params.habit),
+    mutationFn: ([userId, habit]: [string, Habit]) => addHabit(userId, habit),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
     },

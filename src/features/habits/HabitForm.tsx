@@ -51,7 +51,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
         };
         console.log(newHabit)
         addHabit.mutate(
-          { userId, newHabit },
+          [userId, newHabit],
           {
             onError: (error) => {
               console.error("Error adding habit:", error);
