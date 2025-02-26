@@ -17,6 +17,7 @@ import HabitCalendar from "@/features/habits/HabitCalendar";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
 import { getHabitDateRange } from "@/utils/habitDateRange";
+import {useDeleteHabit} from "@/features/habits/hooks/useHabits.ts";
 
 interface HabitItemProps {
   habit: Habit;
@@ -24,7 +25,7 @@ interface HabitItemProps {
 
 const HabitItem: React.FC<HabitItemProps> = (props) => {
   const [isEditing, setIsEditing] = useState(false);
-  const deleteHabit = useHabitStore((state) => state.deleteHabit);
+  const deleteHabit = useDeleteHabit();
   const { progress } = props.habit;
   const userId = useAuthStore((state) => state.userId);
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ const HabitItem: React.FC<HabitItemProps> = (props) => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => deleteHabit(props.habit.id, userId)}
+              onClick={() => deleteHabit.mutate([props.habit.id, userId])}
             >
               {t("delete")}
             </Button>

@@ -16,7 +16,7 @@ import { validate } from "@/utils/validate";
 import InputDate from "@/components/InputDate";
 import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 import { useAuthStore } from "@/store/authStore";
-import {useAddHabits} from "./hooks/useHabits.ts";
+import {useAddHabits, useUpdateHabit} from "./hooks/useHabits.ts";
 
 interface HabitFormProps {
   habit?: Habit;
@@ -29,7 +29,7 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
   const { wishlist } = useWishlist();
 
   const addHabit = useAddHabits();
-  const updateHabit = useHabitStore((state) => state.updateHabit);
+  const updateHabit = useUpdateHabit();
   const { t } = useTranslation();
   const formik = useFormik({
     initialValues: {
@@ -42,7 +42,14 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
     validate,
     onSubmit: async (values) => {
       if (props.habit) {
-        updateHabit(userId, { ...props.habit, ...values });
+        updateHabit.mutate(
+          [userId, { ...props.habit, ...values}],
+          {
+            onError: (error) => {
+              console.error("Error updating habit:", error);
+            },
+          }
+        );
       } else {
         const newHabit = {
           id: Date.now().toString(),

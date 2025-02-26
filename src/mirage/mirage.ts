@@ -16,13 +16,13 @@ export function makeServer({ environment = "development" } = {}) {
               {
                 id: "101",
                 name: "Piter Exercise",
-                startDate: "2025-02-01",
-                endDate: "2025-02-12",
+                startDate: "2025-02-26",
+                endDate: "2025-03-12",
                 frequency: 2,
                 reward: "New Shoes",
                 progress: {
-                  "2025-02-01": true,
-                  "2025-02-03": false,
+                  "2025-02-26": true,
+                  "2025-02-27": false,
                 },
               },
               {
