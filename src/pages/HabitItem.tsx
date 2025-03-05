@@ -16,7 +16,7 @@ import HabitCalendar from "@/features/habits/HabitCalendar";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
 import { getHabitDateRange } from "@/utils/habitDateRange";
-import {useDeleteHabit} from "@/features/habits/hooks/useHabits.ts";
+import { useDeleteHabit } from "@/features/habits/hooks/useHabits.ts";
 
 interface HabitItemProps {
   habit: Habit;

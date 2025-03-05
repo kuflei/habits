@@ -15,7 +15,7 @@ import { validate } from "@/utils/validate";
 import InputDate from "@/components/InputDate";
 import { useWishlist } from "@/features/wishlist/hooks/useWishlist";
 import { useAuthStore } from "@/store/authStore";
-import {useAddHabits, useUpdateHabit} from "./hooks/useHabits.ts";
+import { useAddHabits, useUpdateHabit } from "./hooks/useHabits.ts";
 
 interface HabitFormProps {
   habit?: Habit;
@@ -41,29 +41,23 @@ const HabitForm: React.FC<HabitFormProps> = (props) => {
     validate,
     onSubmit: async (values) => {
       if (props.habit) {
-        updateHabit.mutate(
-          [userId, { ...props.habit, ...values}],
-          {
-            onError: (error) => {
-              console.error("Error updating habit:", error);
-            },
-          }
-        );
+        updateHabit.mutate([userId, { ...props.habit, ...values }], {
+          onError: (error) => {
+            console.error("Error updating habit:", error);
+          },
+        });
       } else {
         const newHabit = {
           id: Date.now().toString(),
           ...values,
           progress: {},
         };
-        console.log(newHabit)
-        addHabit.mutate(
-          [userId, newHabit],
-          {
-            onError: (error) => {
-              console.error("Error adding habit:", error);
-            },
-          }
-        );
+        console.log(newHabit);
+        addHabit.mutate([userId, newHabit], {
+          onError: (error) => {
+            console.error("Error adding habit:", error);
+          },
+        });
       }
       if (props.onSubmit) {
         console.log("Formik values:", values);

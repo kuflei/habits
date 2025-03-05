@@ -1,5 +1,12 @@
 import { useQuery, useMutation, keepPreviousData, useQueryClient } from "@tanstack/react-query";
-import { fetchHabits, fetchPaginationHabits, addHabit, updateHabit, deleteHabit } from "@/api/habits.api";
+import {
+  fetchHabits,
+  fetchPaginationHabits,
+  addHabit,
+  updateHabit,
+  deleteHabit,
+  toggleHabitProgress,
+} from "@/api/habits.api";
 import { Habit } from "@/types/Habit";
 
 export const useHabits = (userId: string) => {
@@ -36,9 +43,9 @@ export const useUpdateHabit = () => {
     mutationFn: ([userId, habit]: [string, Habit]) => updateHabit(userId, habit),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
-    }
-  })
-}
+    },
+  });
+};
 
 export const useDeleteHabit = () => {
   const queryClient = useQueryClient();
@@ -47,7 +54,17 @@ export const useDeleteHabit = () => {
     mutationFn: ([habitId, userId]: [string, string]) => deleteHabit(habitId, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
-    }
-  })
-}
+    },
+  });
+};
+export const useToggleHabit = () => {
+  const queryClient = useQueryClient();
 
+  return useMutation({
+    mutationFn: ([userId, habitId, progress]: [string, string, Record<string, boolean>]) =>
+      toggleHabitProgress(userId, habitId, progress),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+    },
+  });
+};

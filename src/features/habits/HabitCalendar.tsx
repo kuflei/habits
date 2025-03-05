@@ -3,28 +3,31 @@ import Grid from "@mui/material/Grid2";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Habit } from "@/types/Habit";
-import { useHabitStore } from "@/store/useHabitStore";
 import { useAuthStore } from "@/store/authStore";
 import HabitCalendarDay from "@/features/habits/HabitCalendarDay";
 import { DATE_FORMAT } from "@/shared/constants/date";
 import { getHabitDateRange } from "@/utils/habitDateRange";
+import { useToggleHabit, useHabits } from "./hooks/useHabits.ts";
 
 interface HabitCalendarProps {
   habit: Habit;
 }
 
 const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
-  const toggleHabitProgress = useHabitStore((state) => state.toggleHabitProgress);
-  const habit = useHabitStore((state) => state.habits.find((h) => h.id === props.habit.id));
-  const progress = habit ? habit.progress : {};
+  const toggleHabitProgress = useToggleHabit();
   const userId = useAuthStore((state) => state.userId);
+  const { data: habits } = useHabits(userId);
+  const habit = habits.find((h) => h.id === props.habit.id);
+  const progress = habit ? habit.progress : {};
 
   const dateRange = useMemo(() => getHabitDateRange(props.habit), [props.habit]);
 
   const handleDateClick = (date: string) => {
     if (!dateRange.includes(date)) return;
 
-    toggleHabitProgress(userId, props.habit.id, date);
+    const newProgress = { ...progress, [date]: !progress[date] };
+
+    toggleHabitProgress.mutate([userId, props.habit.id, newProgress]);
   };
 
   return (
