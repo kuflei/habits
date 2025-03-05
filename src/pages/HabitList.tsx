@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
-import {Box} from '@mui/material';
+import { Box } from "@mui/material";
 import HabitItem from "@/pages/HabitItem";
 import { useAuthStore } from "@/store/authStore";
 import { usePaginationHabits } from "@/features/habits/hooks/useHabits";
 import PaginationHabits from "../components/PaginationHabits";
-import React, {useState} from "react";
-import {perPage} from "@/shared/constants/per-page";
+import React, { useState } from "react";
+import { perPage } from "@/shared/constants/per-page";
 
 const HabitList = () => {
   const userId = useAuthStore((state) => state.userId);

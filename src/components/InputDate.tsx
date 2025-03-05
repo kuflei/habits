@@ -16,10 +16,7 @@ export interface InputDateProps {
 
 const InputDate: React.FC<InputDateProps> = (props) => {
   const handleChange = (newValue: dayjs.Dayjs | null) => {
-    props.onChange(
-      props.name,
-      newValue ? newValue.format(props.dateFormat || DATE_FORMAT) : null,
-    );
+    props.onChange(props.name, newValue ? newValue.format(props.dateFormat || DATE_FORMAT) : null);
   };
   const formattedValue = props.value ? dayjs(props.value) : null;
   const minDate = props.min ? dayjs(props.min) : undefined;

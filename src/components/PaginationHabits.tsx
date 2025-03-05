@@ -1,5 +1,5 @@
-import React from 'react';
-import { Pagination } from '@mui/material';
+import React from "react";
+import { Pagination } from "@mui/material";
 
 interface PaginationProps {
   currentPage: number;
@@ -15,7 +15,7 @@ const PaginationHabits: React.FC<PaginationProps> = ({ currentPage, totalPages, 
       onChange={onPageChange}
       variant="outlined"
       shape="rounded"
-      sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}
+      sx={{ display: "flex", justifyContent: "center", mt: 3 }}
     />
   );
 };

@@ -9,13 +9,13 @@ import {
   Alert,
   Typography,
   Card,
-  Box} from "@mui/material";
+  Box,
+} from "@mui/material";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
 import { usePaginationHabits } from "@/features/habits/hooks/useHabits";
 import PaginationHabits from "../components/PaginationHabits.tsx";
-import {perPage} from "@/shared/constants/per-page";
-
+import { perPage } from "@/shared/constants/per-page";
 
 const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +41,6 @@ const Home: React.FC = () => {
 
   if (isLoading) return <h2>⏳ Завантаження...</h2>;
   if (error) return <h2>❌ Помилка: {error.message}</h2>;
-
 
   return (
     <div className="home-page">
