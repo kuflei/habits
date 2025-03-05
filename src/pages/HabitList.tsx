@@ -1,12 +1,18 @@
 import { useTranslation } from "react-i18next";
+import {Box} from '@mui/material';
 import HabitItem from "@/pages/HabitItem";
 import { useAuthStore } from "@/store/authStore";
-import { useHabits } from "@/features/habits/hooks/useHabits";
+import { usePaginationHabits } from "@/features/habits/hooks/useHabits";
+import PaginationHabits from "../components/PaginationHabits";
+import React, {useState} from "react";
+import {perPage} from "@/shared/constants/per-page";
 
 const HabitList = () => {
   const userId = useAuthStore((state) => state.userId);
-  const { data: habits, isLoading, error } = useHabits(userId);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, error, isLoading } = usePaginationHabits(userId, currentPage, perPage);
+  const habits = data?.habits || [];
+  const totalPages = data?.totalPages || 0;
   const { t } = useTranslation();
 
   if (isLoading) return <h2>⏳ Завантаження...</h2>;
@@ -16,13 +22,22 @@ const HabitList = () => {
     return <p>{t("noHabitsAvailable")}</p>;
   }
 
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
+
   return (
-    <div className="habit-list">
+    <Box className="habit-list">
       <h1>{t("allHabits")}</h1>
       {habits.map((habit) => (
         <HabitItem key={habit.id} habit={habit} />
       ))}
-    </div>
+      <PaginationHabits
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handleChangePage}
+      />
+    </Box>
   );
 };
 

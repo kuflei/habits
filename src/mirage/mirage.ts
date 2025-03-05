@@ -212,16 +212,31 @@ export function makeServer({ environment = "development" } = {}) {
       });
 
       this.get("/habits", (schema, request) => {
+        // Отримуємо query-параметри
         const userId = request.queryParams.userId;
+        const page = Number(request.queryParams.page) || 1;
+        const perPage = Number(request.queryParams.perPage) || 5;
 
+        // Знаходимо користувача
         const user = schema.db.users.find(userId);
-
         if (!user) {
           return new Response(404, {}, { error: "User not found" });
         }
 
-        return user.habits;
+        // Отримуємо всі звички користувача
+        const allHabits = user.habits;
+        const total = allHabits.length;
+        const totalPages = Math.ceil(total / perPage);
+
+        // Виконуємо пагінацію на сервері
+        const paginatedHabits = allHabits.slice((page - 1) * perPage, page * perPage);
+
+        return {
+          habits: paginatedHabits,
+          totalPages,
+        };
       });
+
       this.patch("/habits/:id", (schema, request) => {
         const id = request.params.id;
         const { habit, userId } = JSON.parse(request.requestBody);

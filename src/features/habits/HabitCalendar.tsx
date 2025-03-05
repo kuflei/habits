@@ -16,8 +16,9 @@ interface HabitCalendarProps {
 const HabitCalendar: React.FC<HabitCalendarProps> = (props) => {
   const toggleHabitProgress = useToggleHabit();
   const userId = useAuthStore((state) => state.userId);
-  const { data: habits } = useHabits(userId);
-  const habit = habits.find((h) => h.id === props.habit.id);
+  const { data } = useHabits(userId);
+  const habitsArray = data?.habits || [];
+  const habit = habitsArray.find((h) => h.id === props.habit.id);
   const progress = habit ? habit.progress : {};
 
   const dateRange = useMemo(() => getHabitDateRange(props.habit), [props.habit]);

@@ -9,12 +9,13 @@ import {
   Alert,
   Typography,
   Card,
-  Box,
-  Pagination,
-} from "@mui/material";
+  Box} from "@mui/material";
 import HabitForm from "@/features/habits/HabitForm";
 import { useAuthStore } from "@/store/authStore";
 import { usePaginationHabits } from "@/features/habits/hooks/useHabits";
+import PaginationHabits from "../components/PaginationHabits.tsx";
+import {perPage} from "@/shared/constants/per-page";
+
 
 const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,8 +23,10 @@ const Home: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1); /*TODO: move pagination to components folder*/
   const { t } = useTranslation();
   const userId = useAuthStore((state) => state.userId);
-  const perPage = 5; /*TODO: move it shared folder*/
-  const { data: habits, error, isLoading } = usePaginationHabits(userId, currentPage, perPage);
+  const { data, error, isLoading } = usePaginationHabits(userId, currentPage, perPage);
+
+  const habits = data?.habits || [];
+  const totalPages = data?.totalPages || 0;
 
   const handleHabitAdded = () => {
     setSnackbarOpen(true);
@@ -39,11 +42,6 @@ const Home: React.FC = () => {
   if (isLoading) return <h2>⏳ Завантаження...</h2>;
   if (error) return <h2>❌ Помилка: {error.message}</h2>;
 
-  const totalPages = Math.ceil(habits.length / perPage); /*TODO: move it to mirage*/
-  const paginatedData = habits.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage,
-  ); /*TODO: move it to mirage*/
 
   return (
     <div className="home-page">
@@ -71,8 +69,8 @@ const Home: React.FC = () => {
             </DialogActions>
           </Dialog>
           <Box className="habit-list">
-            {paginatedData.length > 0 ? (
-              paginatedData.map((habit) => (
+            {habits.length > 0 ? (
+              habits.map((habit) => (
                 <Card key={habit.id} sx={{ mb: 3, p: 2 }}>
                   <Typography variant="h5" gutterBottom>
                     {habit.name}
@@ -88,13 +86,10 @@ const Home: React.FC = () => {
               </Typography>
             )}
           </Box>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-            shape="rounded"
-            sx={{ display: "flex", justifyContent: "center", mt: 3 }}
+          <PaginationHabits
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handleChangePage}
           />
           <Box sx={{ display: "flex", justifyContent: "right", mt: 3 }}>
             <Button variant="contained" onClick={() => setIsModalOpen(true)}>
